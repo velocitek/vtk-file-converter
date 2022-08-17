@@ -1,54 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
+import 'constants.dart';
+import 'converter.dart';
 
-class DownloadPage extends StatefulWidget {
-  const DownloadPage({Key? key}) : super(key: key);
+class DownloadPage extends StatelessWidget {
+  DownloadPage({required this.file});
 
-  @override
-  State<DownloadPage> createState() => _DownloadPageState();
-}
+  final PlatformFile file;
+  late PlatformFile csv = vtk2CSV(file);
+  late PlatformFile gpx = vtk2GPX(file);
 
-class _DownloadPageState extends State<DownloadPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Text('File Name', style: TextStyle(fontSize: 24.0)),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DownloadButton('CSV'),
-          SizedBox(width: 30.0),
-          DownloadButton('GPX'),
-        ],
-      )
-    ]);
+    return Material(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              file.name,
+              style: kTitleText,
+            ),
+            Column(
+              children: [
+                const Text(
+                    '\nSelect the appropriate file type you want to download.\n\n',
+                    style: kSubtitleText),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DownloadButton(fileType: 'CSV', fileEXT: 'csv', file: csv),
+                    const SizedBox(width: 30.0),
+                    DownloadButton(fileType: 'GPX', fileEXT: 'gpx', file: gpx),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '\n\nClick here to return to the Upload page',
+                    style: kReUpload,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class DownloadButton extends StatelessWidget {
-  DownloadButton(this.fileType);
+  DownloadButton(
+      {required this.fileType, required this.fileEXT, required this.file});
 
   final String fileType;
+  final String fileEXT;
+  final PlatformFile file;
+  late String newName = removeEXT(file.name);
+
+  String removeEXT(String str) {
+    if (str != null && str.length >= 3) {
+      str = str.substring(0, str.length - 3);
+      return str;
+    }
+    return str;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.grey,
-        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-      ),
+      style: kButtonStyle,
       onPressed: () async {
-        // await FileSaver.instance.saveFile('file.csv', file.bytes!, 'csv');
+        await FileSaver.instance
+            .saveFile('$newName$fileEXT', file.bytes!, fileEXT);
       },
       child: Text(
         'Download $fileType',
-        style: TextStyle(
-          fontSize: 26.0,
-          color: Colors.black,
-        ),
+        style: kButtonText,
       ),
     );
   }
