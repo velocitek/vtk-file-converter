@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'upload_page.dart';
+import 'pages/upload_page.dart';
 
 void main() async {
   runApp(const MyApp());

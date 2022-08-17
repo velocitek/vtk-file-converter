@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
-import 'constants.dart';
-import 'converter.dart';
+import '../tools/constants.dart';
 
 class DownloadPage extends StatelessWidget {
-  DownloadPage({required this.file});
+  DownloadPage({required this.fileName, required this.csv, required this.gpx});
 
-  final PlatformFile file;
-  late PlatformFile csv = vtk2CSV(file);
-  late PlatformFile gpx = vtk2GPX(file);
+  final String fileName;
+  late PlatformFile csv;
+  late PlatformFile gpx;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class DownloadPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              file.name,
+              fileName,
               style: kTitleText,
             ),
             Column(
@@ -39,6 +38,9 @@ class DownloadPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                  style: TextButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
+                  ),
                   child: const Text(
                     '\n\nClick here to return to the Upload page',
                     style: kReUpload,
@@ -63,7 +65,7 @@ class DownloadButton extends StatelessWidget {
   late String newName = removeEXT(file.name);
 
   String removeEXT(String str) {
-    if (str != null && str.length >= 3) {
+    if (str.length >= 3) {
       str = str.substring(0, str.length - 3);
       return str;
     }

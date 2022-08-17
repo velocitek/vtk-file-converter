@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'constants.dart';
+import 'loading_page.dart';
 import 'download_page.dart';
+import '../tools/constants.dart';
+import '../tools/converter.dart';
 
 class UploadPage extends StatelessWidget {
-  late PlatformFile file;
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -29,11 +29,32 @@ class UploadPage extends StatelessWidget {
                   allowedExtensions: ['vtk'],
                 );
                 if (result == null) return;
-                file = result.files.first;
+                final file = result.files.first;
+                String fileName = file.name;
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DownloadPage(file: file)));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoadingPage(
+                      fileName: fileName,
+                    ),
+                  ),
+                );
+                final csv = vtk2CSV(file);
+                final gpx = vtk2GPX(file);
+                await Future.delayed(
+                  const Duration(seconds: 3),
+                );
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DownloadPage(
+                      fileName: fileName,
+                      csv: csv,
+                      gpx: gpx,
+                    ),
+                  ),
+                );
               },
               child: const Text(
                 'UPLOAD',
