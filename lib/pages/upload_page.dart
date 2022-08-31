@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'loading_page.dart';
-import 'download_page.dart';
 import '../tools/constants.dart';
-import '../tools/converter.dart';
 
 class UploadPage extends StatelessWidget {
+  const UploadPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -14,12 +14,29 @@ class UploadPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Velocitek File Converter',
+              'VTK FILE CONVERTER',
               style: kTitleText,
             ),
+            const SizedBox(
+              height: 60.0,
+            ),
             const Text(
-              '\nConnect your Velocitek device, select, or drag and drop your VTK file, and use our converter\n\n',
+              '\nLet\'s get Started!',
               style: kSubtitleText,
+            ),
+            const SizedBox(
+              height: 30.0,
+            ),
+            const SizedBox(
+              width: 720.0,
+              child: Text(
+                'Connect your Velocitek device via USB to your computer. Then select or drop your VTK file to this window to use our converter.',
+                style: kSubtitleText,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              height: 50.0,
             ),
             ElevatedButton(
               style: kButtonStyle,
@@ -29,35 +46,17 @@ class UploadPage extends StatelessWidget {
                   allowedExtensions: ['vtk'],
                 );
                 if (result == null) return;
-                final file = result.files.first;
-                String fileName = file.name;
+                var file = result.files.first;
+                var fileData = file.bytes;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoadingPage(
-                      fileName: fileName,
-                    ),
-                  ),
-                );
-                final csv = vtk2CSV(file);
-                final gpx = vtk2GPX(file);
-                await Future.delayed(
-                  const Duration(seconds: 3),
-                );
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DownloadPage(
-                      fileName: fileName,
-                      csv: csv,
-                      gpx: gpx,
-                    ),
+                    builder: (context) => LoadingPage(file: fileData),
                   ),
                 );
               },
               child: const Text(
-                'UPLOAD',
+                'UPLOAD VTK FILE',
                 style: kButtonText,
               ),
             ),
