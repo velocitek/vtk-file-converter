@@ -22,6 +22,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void convertVTK() async {
     var csv = await vtk2CSV(widget.file);
     var gpx = await vtk2GPX(widget.file);
+    Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return DownloadPage(csv: csv, gpx: gpx);
     }));
