@@ -1,0 +1,8 @@
+name: command_line_converter
+
+environment:
+    sdk: '>=2.10.0 <3.0.0'
+
+dependencies: 
+    protobuf: ^2.1.0
+  
