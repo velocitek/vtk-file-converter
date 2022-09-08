@@ -1,11 +1,11 @@
+//TODO: Implement converter
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-
-PlatformFile vtk2CSV(PlatformFile file) {
+Future vtk2CSV(var file) async {
+  await Future.delayed(const Duration(seconds: 2));
   return file;
 }
 
-PlatformFile vtk2GPX(PlatformFile file) {
+Future vtk2GPX(var file) async {
   return file;
 }
