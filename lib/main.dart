@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'pages/upload_page.dart';
+import 'models/download_list.dart';
 
-void main() async {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: UploadPage(),
+    return ChangeNotifierProvider(
+      // Creates a global object for all children to refer back to
+      create: (context) => DownloadList(),
+      child: MaterialApp(
+        home: UploadPage(),
+      ),
     );
   }
 }

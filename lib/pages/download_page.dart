@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import '../tools/constants.dart';
-import '../tools/widget_downloader.dart';
-import '../tools/widget_uploader.dart';
+import '../widgets/download_listview.dart';
+import 'package:provider/provider.dart';
+import '../models/download_list.dart';
+import 'package:file_picker/file_picker.dart';
 
-class DownloadPage extends StatefulWidget {
-  const DownloadPage({super.key, required this.csv, required this.gpx});
-  final csv;
-  final gpx;
-
-  @override
-  State<DownloadPage> createState() => _DownloadPageState();
-}
-
-class _DownloadPageState extends State<DownloadPage> {
+class DownloadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -25,14 +18,25 @@ class _DownloadPageState extends State<DownloadPage> {
               style: kTitleText,
             ),
             const SizedBox(height: 75.0),
-            Column(
-              children: [
-                DownloadRow(csv: widget.csv, gpx: widget.gpx),
-                const SizedBox(
-                  height: 35.0,
-                ),
-                UploadButton(buttonText: 'UPLOAD ANOTHER VTK FILE'),
-              ],
+            Container(
+              height: 300.0,
+              child: DownloadListView(),
+            ),
+            ElevatedButton(
+              style: kButtonStyle,
+              onPressed: () async {
+                final result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['vtk'],
+                );
+                if (result == null) return;
+                var upload = result.files.first;
+                final String fileName =
+                    upload.name.substring(0, upload.name.length - 4);
+                Provider.of<DownloadList>(context, listen: false)
+                    .addDownload(fileName, upload);
+              },
+              child: const Text('Upload Button'),
             ),
           ],
         ),

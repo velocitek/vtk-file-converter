@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kTitleText = TextStyle(
-  fontSize: 38.0,
+  fontSize: 64.0,
   fontFamily: 'Roboto',
   fontWeight: FontWeight.w900,
   color: Colors.black,
@@ -13,7 +13,7 @@ const kSubtitleText = TextStyle(
 );
 
 const kButtonText = TextStyle(
-  fontSize: 15.0,
+  fontSize: 18.0,
   fontWeight: FontWeight.w700,
   color: Colors.white,
 );
@@ -30,18 +30,17 @@ const kReupload = TextStyle(
 );
 
 final kButtonStyle = ElevatedButton.styleFrom(
-  primary: Colors.blue,
   elevation: 0.0,
   padding: const EdgeInsets.symmetric(vertical: 30),
-  fixedSize: const Size.fromWidth(250.0),
+  fixedSize: const Size.fromWidth(230.0),
   shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(30),
+    borderRadius: BorderRadius.circular(45),
   ),
 );
 
 final kCancelButtonStyle = ElevatedButton.styleFrom(
   side: const BorderSide(color: Colors.blue, width: 3.0),
-  primary: Colors.white,
+  backgroundColor: Colors.white,
   elevation: 0.0,
   padding: const EdgeInsets.symmetric(vertical: 30),
   fixedSize: const Size.fromWidth(250.0),
