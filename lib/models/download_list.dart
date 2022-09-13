@@ -23,12 +23,17 @@ class DownloadList extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteDownload(DownloadData downloadData) {
-    _downloads.remove(downloadData);
+  void deleteDownload(int index) {
+    _downloads.remove(_downloads[index]);
     notifyListeners();
   }
 
   int get downloadCount {
     return _downloads.length;
+  }
+
+  double get listSize {
+    int listSize = downloads.length;
+    return listSize * 85;
   }
 }

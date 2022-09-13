@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/download_list.dart';
 import 'download_button.dart';
+import '../tools/constants.dart';
 
 class DownloadRow extends StatefulWidget {
   DownloadRow({
@@ -14,7 +15,7 @@ class DownloadRow extends StatefulWidget {
   late final String name;
   var csv;
   var gpx;
-  final DownloadData downloadIndex;
+  final int downloadIndex;
 
   @override
   State<DownloadRow> createState() => _DownloadRowState();
@@ -25,14 +26,17 @@ class _DownloadRowState extends State<DownloadRow> {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Container(
-        padding: const EdgeInsets.symmetric(vertical: 30),
-        width: 250.0,
+      SizedBox(
+        width: 350.0,
         child: TextFormField(
             initialValue: inputValue,
+            style: kTextfieldFont,
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(
+                left: 20.0,
+              ),
               filled: true,
-              fillColor: Colors.grey[300],
+              fillColor: kWhite,
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(30.0),
@@ -46,27 +50,40 @@ class _DownloadRowState extends State<DownloadRow> {
               });
             }),
       ),
+      const SizedBox(
+        width: 10.0,
+      ),
       IconButton(
         icon: const Icon(
           Icons.do_disturb_on,
-          color: Colors.black,
+          color: Colors.white,
         ),
-        iconSize: 45.0,
+        iconSize: 60.0,
         onPressed: () {
           Provider.of<DownloadList>(context, listen: false)
               .deleteDownload(widget.downloadIndex);
         },
       ),
+      const SizedBox(
+        width: 50.0,
+      ),
       DownloadButton(
-          fileName: inputValue,
-          fileType: 'CSV',
-          fileData: widget.csv,
-          fileEXT: 'csv'),
+        fileName: inputValue,
+        fileType: 'CSV',
+        fileData: widget.csv,
+        fileEXT: 'csv',
+        buttonColor: kOrange,
+      ),
+      const SizedBox(
+        width: 20.0,
+      ),
       DownloadButton(
-          fileName: inputValue,
-          fileType: 'GPX',
-          fileData: widget.gpx,
-          fileEXT: 'gpx'),
+        fileName: inputValue,
+        fileType: 'GPX',
+        fileData: widget.gpx,
+        fileEXT: 'gpx',
+        buttonColor: kBlue2,
+      ),
     ]);
   }
 }

@@ -12,11 +12,18 @@ class DownloadListView extends StatelessWidget {
           // Index is the count for the list.
           itemBuilder: (context, index) {
             final downloadElement = downloadList.downloads[index];
-            return DownloadRow(
-              name: downloadElement.name,
-              csv: downloadElement.csv,
-              gpx: downloadElement.gpx,
-              downloadIndex: downloadElement,
+            return Column(
+              children: [
+                DownloadRow(
+                  name: downloadElement.name,
+                  csv: downloadElement.csv,
+                  gpx: downloadElement.gpx,
+                  downloadIndex: index,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                )
+              ],
             );
           },
           // This is required to set the number of items for ListView.
