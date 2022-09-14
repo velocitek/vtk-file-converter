@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../models/download_list.dart';
 import '../tools/constants.dart';
 import '../widgets/download_listview.dart';
-import 'package:provider/provider.dart';
-import '../models/download_list.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 
 class DownloadPage extends StatelessWidget {
   @override
@@ -46,7 +46,7 @@ class DownloadPage extends StatelessWidget {
               SizedBox(
                 height:
                     Provider.of<DownloadList>(context, listen: true).listSize,
-                child: DownloadListView(),
+                child: const DownloadListView(),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 755.0),

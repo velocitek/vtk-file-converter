@@ -4,9 +4,10 @@ import 'dart:collection';
 class DownloadData {
   // Contains information needed to build a download kit.
   DownloadData({required this.name, required this.csv, required this.gpx});
-  final name;
+  late String name;
   final csv;
   final gpx;
+  bool isLoading = false;
 }
 
 class DownloadList extends ChangeNotifier {
@@ -19,6 +20,9 @@ class DownloadList extends ChangeNotifier {
 
   void addDownload(String name, var vtk) {
     final newDownload = DownloadData(name: name, csv: vtk, gpx: vtk);
+    if (downloadCount == 3) {
+      deleteDownload(0);
+    }
     _downloads.add(newDownload);
     notifyListeners();
   }
@@ -28,12 +32,22 @@ class DownloadList extends ChangeNotifier {
     notifyListeners();
   }
 
+  void editName(String edit, int index) {
+    _downloads[index].name = edit;
+    notifyListeners();
+  }
+
+  void endLoading(int index) async {
+    _downloads[index].isLoading = false;
+    notifyListeners();
+  }
+
   int get downloadCount {
     return _downloads.length;
   }
 
   double get listSize {
-    int listSize = downloads.length;
-    return listSize * 85;
+    int listSize = _downloads.length;
+    return listSize * 91;
   }
 }

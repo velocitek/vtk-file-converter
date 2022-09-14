@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import '../tools/constants.dart';
 import 'download_page.dart';
-import 'package:provider/provider.dart';
 import '../models/download_list.dart';
+import '../tools/constants.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 
 class UploadPage extends StatelessWidget {
   const UploadPage({Key? key}) : super(key: key);
@@ -77,6 +75,9 @@ class UploadPage extends StatelessWidget {
               },
               child: const Text('UPLOAD VTK FILE', style: kButtonText),
             ),
+            const SizedBox(
+              height: 80.0,
+            )
           ],
         ),
       ),
