@@ -4,6 +4,7 @@ const kBlue = Color(0xFF4890FB);
 const kBlue2 = Color(0xFF497CC1);
 const kOrange = Color(0xFFD7A500);
 const kWhite = Colors.white;
+const kBlack = Colors.black;
 
 const kTitleText = TextStyle(
   fontSize: 64.0,
@@ -21,6 +22,12 @@ const kButtonText = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.w600,
   color: kWhite,
+);
+
+const kFileText = TextStyle(
+  fontSize: 20.0,
+  fontWeight: FontWeight.w600,
+  color: kBlack,
 );
 
 const kTextfieldFont = TextStyle(

@@ -4,20 +4,15 @@ import 'download_button.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 class DownloadRow extends StatefulWidget {
   DownloadRow({
     super.key,
     required this.name,
-    required this.csv,
-    required this.gpx,
     required this.downloadIndex,
   });
 
   final String name;
-  var csv;
-  var gpx;
   final int downloadIndex;
 
   @override
@@ -25,27 +20,32 @@ class DownloadRow extends StatefulWidget {
 }
 
 class _DownloadRowState extends State<DownloadRow> {
+  void endLoading() async {
+    await Provider.of<DownloadList>(context, listen: false)
+        .convertVTK(widget.downloadIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
+    endLoading();
     if (Provider.of<DownloadList>(context, listen: true)
         .downloads[widget.downloadIndex]
         .isLoading) {
       return const LoadingSpinner();
     } else {
       return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 0.0,
-            padding: const EdgeInsets.symmetric(vertical: 28),
-            fixedSize: const Size.fromWidth(350.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(45),
-            ),
+        Container(
+          height: 60.0,
+          width: 350.0,
+          decoration: const BoxDecoration(
+            color: kWhite,
+            borderRadius: BorderRadius.all(Radius.circular(45)),
           ),
-          onPressed: null,
-          child: Text(
-            widget.name,
-            style: kButtonText,
+          child: Center(
+            child: Text(
+              widget.name,
+              style: kFileText,
+            ),
           ),
         ),
         const SizedBox(
@@ -70,7 +70,9 @@ class _DownloadRowState extends State<DownloadRow> {
         DownloadButton(
           fileName: widget.name,
           fileType: 'CSV',
-          fileData: widget.csv,
+          fileData: Provider.of<DownloadList>(context, listen: false)
+              .downloads[widget.downloadIndex]
+              .csv,
           fileEXT: 'csv',
           buttonColor: kOrange,
         ),
@@ -80,7 +82,9 @@ class _DownloadRowState extends State<DownloadRow> {
         DownloadButton(
           fileName: widget.name,
           fileType: 'GPX',
-          fileData: widget.gpx,
+          fileData: Provider.of<DownloadList>(context, listen: false)
+              .downloads[widget.downloadIndex]
+              .gpx,
           fileEXT: 'gpx',
           buttonColor: kBlue2,
         ),
@@ -88,30 +92,3 @@ class _DownloadRowState extends State<DownloadRow> {
     }
   }
 }
-
-// SizedBox(
-// width: 350.0,
-// // Allows for renaming of downloads.
-// child: TextFormField(
-// initialValue: widget.name,
-// style: kTextfieldFont,
-// decoration: const InputDecoration(
-// contentPadding: EdgeInsets.only(
-// left: 20.0,
-// ),
-// filled: true,
-// fillColor: kWhite,
-// border: OutlineInputBorder(
-// borderRadius: BorderRadius.all(
-// Radius.circular(30.0),
-// ),
-// borderSide: BorderSide.none,
-// ),
-// ),
-// onChanged: (value) {
-// setState(() {
-// Provider.of<DownloadList>(context, listen: false)
-//     .editName(value, widget.downloadIndex);
-// });
-// }),
-// ),
