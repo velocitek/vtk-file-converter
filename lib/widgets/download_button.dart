@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../tools/constants.dart';
 import 'package:file_saver/file_saver.dart';
+import 'dart:typed_data';
+import '../tools/constants.dart';
 
 class DownloadButton extends StatelessWidget {
   DownloadButton({
@@ -12,7 +13,7 @@ class DownloadButton extends StatelessWidget {
   });
   final String fileName;
   final String fileType;
-  var fileData;
+  final Uint8List fileData;
   final String fileEXT;
   final Color buttonColor;
 
@@ -30,7 +31,7 @@ class DownloadButton extends StatelessWidget {
       ),
       onPressed: () async {
         await FileSaver.instance
-            .saveFile('$fileName.$fileType', fileData.bytes!, fileEXT);
+            .saveFile('$fileName.$fileType', fileData, fileEXT);
       },
       child: Text(
         'DOWNLOAD $fileType',

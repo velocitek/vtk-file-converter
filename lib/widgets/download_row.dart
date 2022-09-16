@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vtk_converter/widgets/loading_spinner.dart';
 import 'download_button.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
-import 'package:provider/provider.dart';
 
 class DownloadRow extends StatefulWidget {
   DownloadRow({
@@ -20,16 +20,19 @@ class DownloadRow extends StatefulWidget {
 }
 
 class _DownloadRowState extends State<DownloadRow> {
-  void endLoading() async {
-    await Provider.of<DownloadList>(context, listen: false)
+  Future endLoading() async {
+    Provider.of<DownloadList>(context, listen: false)
         .convertVTK(widget.downloadIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+    var downloadProvider = Provider.of<DownloadList>(context, listen: false);
+    String name = widget.name;
+    int index = widget.downloadIndex;
     endLoading();
     if (Provider.of<DownloadList>(context, listen: true)
-        .downloads[widget.downloadIndex]
+        .downloads[index]
         .isLoading) {
       return const LoadingSpinner();
     } else {
@@ -43,7 +46,7 @@ class _DownloadRowState extends State<DownloadRow> {
           ),
           child: Center(
             child: Text(
-              widget.name,
+              name,
               style: kFileText,
             ),
           ),
@@ -59,8 +62,7 @@ class _DownloadRowState extends State<DownloadRow> {
           iconSize: 60.0,
           onPressed: () {
             setState(() {
-              Provider.of<DownloadList>(context, listen: false)
-                  .deleteDownload(widget.downloadIndex);
+              downloadProvider.deleteDownload(index);
             });
           },
         ),
@@ -68,11 +70,9 @@ class _DownloadRowState extends State<DownloadRow> {
           width: 50.0,
         ),
         DownloadButton(
-          fileName: widget.name,
+          fileName: name,
           fileType: 'CSV',
-          fileData: Provider.of<DownloadList>(context, listen: false)
-              .downloads[widget.downloadIndex]
-              .csv,
+          fileData: downloadProvider.downloads[index].csv,
           fileEXT: 'csv',
           buttonColor: kOrange,
         ),
@@ -80,11 +80,9 @@ class _DownloadRowState extends State<DownloadRow> {
           width: 20.0,
         ),
         DownloadButton(
-          fileName: widget.name,
+          fileName: name,
           fileType: 'GPX',
-          fileData: Provider.of<DownloadList>(context, listen: false)
-              .downloads[widget.downloadIndex]
-              .gpx,
+          fileData: downloadProvider.downloads[index].gpx,
           fileEXT: 'gpx',
           buttonColor: kBlue2,
         ),

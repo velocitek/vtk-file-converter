@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 import '../widgets/download_listview.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:provider/provider.dart';
+import '../widgets/upload_file.dart';
 
 class DownloadPage extends StatelessWidget {
   @override
@@ -53,16 +53,7 @@ class DownloadPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: kButtonStyle,
                   onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: ['vtk'],
-                    );
-                    if (result == null) return;
-                    var upload = result.files.first;
-                    final String fileName =
-                        upload.name.substring(0, upload.name.length - 4);
-                    Provider.of<DownloadList>(context, listen: false)
-                        .addDownload(fileName, upload);
+                    await uploadFile(context);
                   },
                   child: const Text(
                     'ADD FILE',

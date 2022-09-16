@@ -1,17 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'dart:collection';
-import 'dart:typed_data';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import '../tools/command_line_converter/protobuf/vtk.pb.dart';
-import '../tools/command_line_converter/vtk_tool.dart';
-import 'dart:io';
+import '../tools/converter.dart';
 
 class DownloadData {
   // Contains information needed to build a download kit.
   DownloadData({required this.name, required this.vtk});
   late String name;
-  var vtk;
-  var csv;
-  var gpx;
+  final Uint8List vtk;
+  late Uint8List csv;
+  late Uint8List gpx;
   bool isLoading = true;
 }
 
@@ -23,9 +22,9 @@ class DownloadList extends ChangeNotifier {
     return UnmodifiableListView(_downloads);
   }
 
-  Future convertVTK(int index) async {
-    await converter(index);
-    endLoading(index);
+  void convertVTK(int index) {
+    converter(index);
+    _downloads[index].isLoading = false;
     notifyListeners();
   }
 
@@ -51,10 +50,6 @@ class DownloadList extends ChangeNotifier {
     notifyListeners();
   }
 
-  void endLoading(int index) {
-    _downloads[index].isLoading = false;
-  }
-
   int get downloadCount {
     return _downloads.length;
   }
@@ -64,12 +59,19 @@ class DownloadList extends ChangeNotifier {
     return listSize * 91;
   }
 
-  //TODO: Converter
-  Future converter(int index) async {
+  void converter(int index) {
+    downloads[index].csv = vtkToCSV(index);
+    downloads[index].gpx = downloads[index].vtk;
+  }
+
+  Uint8List vtkToCSV(int index) {
     List<Record> records = readVtk(downloads[index].vtk);
     List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    downloads[index].csv = downloads[index].vtk;
-    downloads[index].gpx = downloads[index].vtk;
-    await Future.delayed(const Duration(seconds: 1));
+    String stringBytes = 'time, sog\n';
+    for (int i = 0; i < dartTrackpoints.length; i++) {
+      stringBytes += '${dartTrackpoints[i].time}, ${dartTrackpoints[i].sog}\n';
+    }
+    Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
+    return csvBytes;
   }
 }
