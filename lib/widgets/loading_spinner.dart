@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../tools/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../tools/constants.dart';
 
 class LoadingSpinner extends StatelessWidget {
   const LoadingSpinner({super.key});

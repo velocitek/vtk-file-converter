@@ -6,12 +6,14 @@ import '../widgets/download_listview.dart';
 import '../widgets/upload_file.dart';
 
 class DownloadPage extends StatelessWidget {
+  const DownloadPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Container(
         alignment: Alignment.center,
-        color: const Color(0xFF10253E),
+        color: kDarkBlue,
         child: SizedBox(
           height: 550.0,
           child: Column(
@@ -44,21 +46,32 @@ class DownloadPage extends StatelessWidget {
               ),
               const SizedBox(height: 15.0),
               SizedBox(
-                height:
+                height: //Expands the size of the ListView for every new upload, keeps the download button right below the latest upload.
                     Provider.of<DownloadList>(context, listen: true).listSize,
                 child: const DownloadListView(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 755.0),
-                child: ElevatedButton(
-                  style: kButtonStyle,
-                  onPressed: () async {
-                    await uploadFile(context);
-                  },
-                  child: const Text(
-                    'ADD FILE',
-                    style: kButtonText,
-                  ),
+              SizedBox(
+                width: 1005.0,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: kButtonStyle,
+                      onPressed: () async {
+                        await uploadFile(context);
+                      },
+                      child: const Text(
+                        'ADD FILE',
+                        style: kButtonText,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30.0,
+                    ),
+                    const Text(
+                      'The converter can only hold up to 3 files and will automatically delete the earliest entry when\nuploading a fourth one.',
+                      style: kWarningText,
+                    ),
+                  ],
                 ),
               ),
             ],

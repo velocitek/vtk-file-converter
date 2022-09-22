@@ -18,6 +18,7 @@ class DownloadListView extends StatelessWidget {
             return Column(
               children: [
                 DownloadRow(
+                  //Passes only the name and index. The name is required otherwise it wouldn't update properly upon deletion.
                   key: Key(downloadElement.name),
                   name: downloadElement.name,
                   downloadIndex: index,

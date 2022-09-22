@@ -54,6 +54,7 @@ class UploadPage extends StatelessWidget {
             ElevatedButton(
               style: kButtonStyle,
               onPressed: () async {
+                //File upload widget.
                 await uploadFile(context);
                 Navigator.push(
                   context,
