@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vtk_converter/widgets/loading_spinner.dart';
@@ -20,26 +22,28 @@ class DownloadRow extends StatefulWidget {
 }
 
 class _DownloadRowState extends State<DownloadRow> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Provider.of<DownloadList>(context, listen: false)
-  //       .convertVTK(widget.downloadIndex);
-  // }
+  late Future<bool> dataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    dataFuture = Provider.of<DownloadList>(context, listen: false)
+        .convertVTK(widget.downloadIndex);
+  }
 
   @override
   Widget build(BuildContext context) {
     //This is used instead of passing in data to this widget. It grabs the data from a different object instead of creating a new object.
-    var downloadProvider = Provider.of<DownloadList>(context, listen: false);
-    int index = widget.downloadIndex;
-    String name = widget.name;
+    final downloadProvider = Provider.of<DownloadList>(context, listen: false);
+    final int index = widget.downloadIndex;
+    final String name = widget.name;
     return FutureBuilder(
         //Initiates conversion while displaying the loading spinner.
-        future: downloadProvider.convertVTK(index),
+        future: dataFuture,
         builder: (context, snapshot) {
           //Checks to make sure if both the conversion is done and if it's already occurred so it doesn't reconvert at every state update.
           if (snapshot.connectionState != ConnectionState.done &&
-              downloadProvider.downloads[index].isLoading == true) {
+              downloadProvider.downloads[index].isLoading) {
             return const LoadingSpinner();
           } else {
             return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -52,7 +56,7 @@ class _DownloadRowState extends State<DownloadRow> {
                 ),
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
+                    padding: const EdgeInsets.only(top: 2.0),
                     child: TextFormField(
                       initialValue: name,
                       decoration:

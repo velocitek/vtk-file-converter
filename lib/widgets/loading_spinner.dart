@@ -4,7 +4,6 @@ import '../tools/constants.dart';
 
 class LoadingSpinner extends StatelessWidget {
   const LoadingSpinner({super.key});
-
   @override
   Widget build(BuildContext context) {
     return const SpinKitCircle(

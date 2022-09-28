@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/download_list.dart';
 
 Future uploadFile(BuildContext context) async {
-  var downloadProvider = Provider.of<DownloadList>(context, listen: false);
+  final downloadProvider = Provider.of<DownloadList>(context, listen: false);
   final result = await FilePicker.platform.pickFiles(
     //Restricts upload file type to only VTK.
     type: FileType.custom,

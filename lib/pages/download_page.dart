@@ -48,7 +48,7 @@ class DownloadPage extends StatelessWidget {
               SizedBox(
                 height: //Expands the size of the ListView for every new upload, keeps the download button right below the latest upload.
                     Provider.of<DownloadList>(context, listen: true).listSize,
-                child: const DownloadListView(),
+                child: DownloadListView(),
               ),
               SizedBox(
                 width: 1005.0,

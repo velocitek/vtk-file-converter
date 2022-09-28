@@ -7,7 +7,7 @@ import '../tools/converter.dart';
 class DownloadData {
   // Contains information needed to build a download kit.
   DownloadData({required this.name, required this.vtk});
-  late String name;
+  String name;
   final Uint8List vtk;
   late Uint8List csv;
   late Uint8List gpx;
@@ -54,14 +54,14 @@ class DownloadList extends ChangeNotifier {
   double get listSize {
     //Calculates size of ListView container based off of amount of uploaded files.
     int listSize = _downloads.length;
-    return listSize * 91;
+    return listSize * 91.00;
   }
 
   //Sets objects within data as converted.
   Future<bool> convertVTK(int index) async {
     if (_downloads[index].isLoading) {
-      //await Future.delayed(const Duration(seconds: 1));
-      await converter(index);
+      _downloads[index].csv = vtkToCSV(index);
+      //_downloads[index].gpx = vtkToGPX(index);
       _downloads[index].isLoading = false;
       return true;
     } else {
@@ -69,19 +69,26 @@ class DownloadList extends ChangeNotifier {
     }
   }
 
-  Future<bool> converter(int index) async {
-    _downloads[index].csv = vtkToCSV(index);
-    _downloads[index].gpx = vtkToGPX(index);
-    return true;
-  }
-
   Uint8List vtkToCSV(int index) {
     print('Converting to CSV...');
     List<Record> records = readVtk(_downloads[index].vtk);
     List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    String stringBytes = 'time, sog\n';
+    String stringBytes = 'time, latitude, longitude, sog, cog,'
+        'q1, q2, q3, q4, mag_heading, heel, pitch\n';
     for (int i = 0; i < dartTrackpoints.length; i++) {
-      stringBytes += '${dartTrackpoints[i].time}, ${dartTrackpoints[i].sog}\n';
+      stringBytes += "${dartTrackpoints[i].time}, "
+          "${dartTrackpoints[i].latitude}, "
+          "${dartTrackpoints[i].longitude}, "
+          "${dartTrackpoints[i].sog}, "
+          "${dartTrackpoints[i].cog}, "
+          "${dartTrackpoints[i].quaternion[0]}, "
+          "${dartTrackpoints[i].quaternion[1]}, "
+          "${dartTrackpoints[i].quaternion[2]}, "
+          "${dartTrackpoints[i].quaternion[3]}, "
+          "${dartTrackpoints[i].magHeading}, "
+          "${dartTrackpoints[i].heel}, "
+          "${dartTrackpoints[i].pitch}\n";
+      ;
     }
     Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
     return csvBytes;
@@ -90,7 +97,11 @@ class DownloadList extends ChangeNotifier {
 //TODO: VTK to GPX converter.
   Uint8List vtkToGPX(int index) {
     print('Converting to GPX...');
-    Uint8List gpxBytes = _downloads[index].vtk;
+    List<Record> records = readVtk(_downloads[index].vtk);
+    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
+    String stringBytes = 'time, latitude, longitude, sog, cog,'
+        'q1, q2, q3, q4, mag_heading, heel, pitch\n';
+    Uint8List gpxBytes = utf8.encode(stringBytes) as Uint8List;
     return gpxBytes;
   }
 }

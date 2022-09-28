@@ -14,7 +14,7 @@ class DownloadCSV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var downloadProvider =
+    final downloadProvider =
         Provider.of<DownloadList>(context, listen: false).downloads[index];
     Uint8List fileData = downloadProvider.csv;
     return ElevatedButton(
@@ -41,9 +41,9 @@ class DownloadGPX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var downloadProvider =
+    final downloadProvider =
         Provider.of<DownloadList>(context, listen: false).downloads[index];
-    Uint8List fileData = downloadProvider.gpx;
+    Uint8List fileData = downloadProvider.vtk;
     return ElevatedButton(
       style: kButtonGPX,
       onPressed: () {

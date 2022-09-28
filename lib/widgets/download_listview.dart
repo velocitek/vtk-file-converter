@@ -4,8 +4,6 @@ import '../widgets/download_row.dart';
 import 'package:provider/provider.dart';
 
 class DownloadListView extends StatelessWidget {
-  const DownloadListView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DownloadList>(

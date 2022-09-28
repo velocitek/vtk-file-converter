@@ -4,7 +4,7 @@ import '../tools/constants.dart';
 import '../widgets/upload_file.dart';
 
 class UploadPage extends StatelessWidget {
-  const UploadPage({Key? key}) : super(key: key);
+  const UploadPage({super.key});
 
   @override
   Widget build(BuildContext context) {
