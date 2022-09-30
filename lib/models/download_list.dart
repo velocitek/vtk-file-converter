@@ -24,7 +24,6 @@ class DownloadList extends ChangeNotifier {
   }
 
   void addDownload(String name, var vtk) {
-    print('Uploading file...');
     final newDownload = DownloadData(
       name: name,
       vtk: vtk,
@@ -61,8 +60,12 @@ class DownloadList extends ChangeNotifier {
   //Sets objects within data as converted.
   Future<bool> convertVTK(int index) async {
     if (_downloads[index].isLoading) {
-      _downloads[index].csv = readVTK(index);
-      _downloads[index].gpx = vtkToGPX(index);
+      List<Record> records = readVtk(_downloads[index].vtk);
+      List<DartTrackpoint> dartTrackpoints =
+          vtkRecordsToDartTrackpoints(records);
+      _downloads[index].csv = writeCSV(index, dartTrackpoints);
+      _downloads[index].gpx = writeGPX(index, dartTrackpoints);
+      print('Finishing conversions...');
       _downloads[index].isLoading = false;
       return true;
     } else {
@@ -70,10 +73,8 @@ class DownloadList extends ChangeNotifier {
     }
   }
 
-  Uint8List readVTK(int index) {
+  Uint8List writeCSV(int index, List<DartTrackpoint> dartTrackpoints) {
     print('Converting to CSV...');
-    List<Record> records = readVtk(_downloads[index].vtk);
-    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
     String stringBytes = 'time, latitude, longitude, sog, cog,'
         'q1, q2, q3, q4, mag_heading, heel, pitch\n';
     for (int i = 0; i < dartTrackpoints.length; i++) {
@@ -96,10 +97,8 @@ class DownloadList extends ChangeNotifier {
   }
 
 //TODO: VTK to GPX converter.
-  Uint8List vtkToGPX(int index) {
+  Uint8List writeGPX(int index, List<DartTrackpoint> dartTrackpoints) {
     print('Converting to GPX...');
-    List<Record> records = readVtk(_downloads[index].vtk);
-    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
     final builder = XmlBuilder();
     buildGpx(builder, dartTrackpoints);
     final document = builder.buildDocument();

@@ -6,7 +6,7 @@ import 'package:xml/xml.dart';
 
 List<Record> readVtk(Uint8List inputFile) {
   //final Uint8List fileBytes = inputFile.readAsBytesSync();
-
+  print('Reading VTK...');
   final Uint8List fileBytes = inputFile;
   //print(fileBytes);
   int i = 0;

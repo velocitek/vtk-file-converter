@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:provider/provider.dart';
-import 'dart:typed_data';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 
@@ -16,13 +15,12 @@ class DownloadCSV extends StatelessWidget {
   Widget build(BuildContext context) {
     final downloadProvider =
         Provider.of<DownloadList>(context, listen: false).downloads[index];
-    Uint8List fileData = downloadProvider.csv;
     return ElevatedButton(
       style: kButtonCSV,
       onPressed: () {
         String name = downloadProvider.name;
         print('Downloading $name...');
-        FileSaver.instance.saveFile('$name.csv', fileData, 'CSV');
+        FileSaver.instance.saveFile('$name.csv', downloadProvider.csv, 'CSV');
       },
       child: const Text(
         'DOWNLOAD CSV',
@@ -43,13 +41,12 @@ class DownloadGPX extends StatelessWidget {
   Widget build(BuildContext context) {
     final downloadProvider =
         Provider.of<DownloadList>(context, listen: false).downloads[index];
-    Uint8List fileData = downloadProvider.gpx;
     return ElevatedButton(
       style: kButtonGPX,
       onPressed: () {
         String name = downloadProvider.name;
         print('Downloading $name...');
-        FileSaver.instance.saveFile('$name.gpx', fileData, 'GPX');
+        FileSaver.instance.saveFile('$name.gpx', downloadProvider.gpx, 'GPX');
       },
       child: const Text(
         'DOWNLOAD GPX',

@@ -6,6 +6,7 @@ class LoadingSpinner extends StatelessWidget {
   const LoadingSpinner({super.key});
   @override
   Widget build(BuildContext context) {
+    print('Loading spinner...');
     return const SpinKitCircle(
       color: kWhite,
       size: 80.0,

@@ -27,7 +27,12 @@ class _DownloadRowState extends State<DownloadRow> {
   @override
   void initState() {
     super.initState();
-    dataFuture = Provider.of<DownloadList>(context, listen: false)
+    print('Init state');
+    dataFuture = _convertVTK();
+  }
+
+  Future<bool> _convertVTK() async {
+    return await Provider.of<DownloadList>(context, listen: false)
         .convertVTK(widget.downloadIndex);
   }
 
@@ -37,16 +42,21 @@ class _DownloadRowState extends State<DownloadRow> {
     final downloadProvider = Provider.of<DownloadList>(context, listen: false);
     final int index = widget.downloadIndex;
     final String name = widget.name;
-    return FutureBuilder(
-        //Initiates conversion while displaying the loading spinner.
-        future: dataFuture,
-        builder: (context, snapshot) {
-          //Checks to make sure if both the conversion is done and if it's already occurred so it doesn't reconvert at every state update.
-          if (snapshot.connectionState != ConnectionState.done &&
-              downloadProvider.downloads[index].isLoading) {
-            return const LoadingSpinner();
-          } else {
-            return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    print('Loading widget...');
+    return FutureBuilder<bool>(
+      //Initiates conversion while displaying the loading spinner.
+      future: dataFuture,
+      builder: (context, snapshot) {
+        print('Loading builder...');
+        //Checks to make sure if both the conversion is done and if it's already occurred so it doesn't reconvert at every state update.
+        if (snapshot.connectionState != ConnectionState.done &&
+            downloadProvider.downloads[index].isLoading) {
+          print('Loading Spinner');
+          return const LoadingSpinner();
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Container(
                 height: 60.0,
                 width: 350.0,
@@ -97,8 +107,10 @@ class _DownloadRowState extends State<DownloadRow> {
               DownloadGPX(
                 index: index,
               ),
-            ]);
-          }
-        });
+            ],
+          );
+        }
+      },
+    );
   }
 }
