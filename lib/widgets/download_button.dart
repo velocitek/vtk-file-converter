@@ -43,7 +43,7 @@ class DownloadGPX extends StatelessWidget {
   Widget build(BuildContext context) {
     final downloadProvider =
         Provider.of<DownloadList>(context, listen: false).downloads[index];
-    Uint8List fileData = downloadProvider.vtk;
+    Uint8List fileData = downloadProvider.gpx;
     return ElevatedButton(
       style: kButtonGPX,
       onPressed: () {

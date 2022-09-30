@@ -53,8 +53,7 @@ class DartTrackpoint {
     quaternion[1] = trackpoint.q2E3 / 1e3;
     quaternion[2] = trackpoint.q3E3 / 1e3;
     quaternion[3] = trackpoint.q4E3 / 1e3;
-    eulerAngles =
-        eulerFromQuaternion(quaternion); //TODO: Looks like it passed here
+    eulerAngles = eulerFromQuaternion(quaternion);
     magHeading = (-degrees(eulerAngles[2]) % 360).round();
     heel = (degrees(eulerAngles[0])).round();
     pitch = (-degrees(eulerAngles[1])).round();
@@ -136,25 +135,24 @@ Matrix3 matrixFromQuaternion(List<double> q) {
   }
 
   // op = outer product
-  var op = List.generate(elementsInQuaternion,
+  var op = List<List<double>>.generate(elementsInQuaternion,
       (i) => List.filled(elementsInQuaternion, 0, growable: false),
       growable: false);
 
   for (int i = 0; i < elementsInQuaternion; i++) {
     for (int j = 0; j < elementsInQuaternion; j++) {
-      op[i][j] = ((qScaled[i] * qScaled[j]) * 10000)
-          .toInt(); // TODO: This should probably be a double instead. Multiplied by 10000 to work around for now.
+      op[i][j] = qScaled[i] * qScaled[j];
     }
   }
 
   double m11 = 1.0 - op[2][2] - op[3][3];
-  double m12 = (op[1][2] - op[3][0]) as double;
-  double m13 = (op[1][3] + op[2][0]) as double;
-  double m21 = (op[1][2] + op[3][0]) as double;
+  double m12 = op[1][2] - op[3][0];
+  double m13 = op[1][3] + op[2][0];
+  double m21 = op[1][2] + op[3][0];
   double m22 = 1.0 - op[1][1] - op[3][3];
-  double m23 = (op[2][3] - op[1][0]) as double;
-  double m31 = (op[1][3] - op[2][0]) as double;
-  double m32 = (op[2][3] + op[1][0]) as double;
+  double m23 = op[2][3] - op[1][0];
+  double m31 = op[1][3] - op[2][0];
+  double m32 = op[2][3] + op[1][0];
   double m33 = 1.0 - op[1][1] - op[2][2];
 
   return Matrix3(m11, m21, m31, m12, m22, m32, m13, m23, m33);
@@ -163,7 +161,7 @@ Matrix3 matrixFromQuaternion(List<double> q) {
 void buildXmlTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
   builder.element('trkpt', nest: () {
     builder.attribute('lat', '${trackpoint.latitude}');
-    builder.attribute('long', '${trackpoint.longitude}');
+    builder.attribute('lon', '${trackpoint.longitude}');
     String timestamp = '${trackpoint.time}';
     String gpxTimestamp =
         timestamp.substring(0, 10) + 'T' + timestamp.substring(11);

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:xml/xml.dart';
 import '../tools/command_line_converter/protobuf/vtk.pb.dart';
 import '../tools/converter.dart';
 
@@ -60,8 +61,8 @@ class DownloadList extends ChangeNotifier {
   //Sets objects within data as converted.
   Future<bool> convertVTK(int index) async {
     if (_downloads[index].isLoading) {
-      _downloads[index].csv = vtkToCSV(index);
-      //_downloads[index].gpx = vtkToGPX(index);
+      _downloads[index].csv = readVTK(index);
+      _downloads[index].gpx = vtkToGPX(index);
       _downloads[index].isLoading = false;
       return true;
     } else {
@@ -69,7 +70,7 @@ class DownloadList extends ChangeNotifier {
     }
   }
 
-  Uint8List vtkToCSV(int index) {
+  Uint8List readVTK(int index) {
     print('Converting to CSV...');
     List<Record> records = readVtk(_downloads[index].vtk);
     List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
@@ -99,9 +100,13 @@ class DownloadList extends ChangeNotifier {
     print('Converting to GPX...');
     List<Record> records = readVtk(_downloads[index].vtk);
     List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    String stringBytes = 'time, latitude, longitude, sog, cog,'
-        'q1, q2, q3, q4, mag_heading, heel, pitch\n';
-    Uint8List gpxBytes = utf8.encode(stringBytes) as Uint8List;
+    final builder = XmlBuilder();
+    buildGpx(builder, dartTrackpoints);
+    final document = builder.buildDocument();
+    String stringByes = document.toXmlString(pretty: true);
+    Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
+    // String stringBytes = 'time, latitude, longitude, sog, cog,'
+    //     'q1, q2, q3, q4, mag_heading, heel, pitch\n';
     return gpxBytes;
   }
 }
