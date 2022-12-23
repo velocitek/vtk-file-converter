@@ -12,7 +12,6 @@ class DownloadData {
   final Uint8List vtk;
   late Uint8List csv;
   late Uint8List gpx;
-  bool isLoading = true;
 }
 
 class DownloadList extends ChangeNotifier {
@@ -58,19 +57,12 @@ class DownloadList extends ChangeNotifier {
   }
 
   //Sets objects within data as converted.
-  Future<bool> convertVTK(int index) async {
-    if (_downloads[index].isLoading) {
-      List<Record> records = readVtk(_downloads[index].vtk);
-      List<DartTrackpoint> dartTrackpoints =
-          vtkRecordsToDartTrackpoints(records);
-      _downloads[index].csv = writeCSV(index, dartTrackpoints);
-      _downloads[index].gpx = writeGPX(index, dartTrackpoints);
-      print('Finishing conversions...');
-      _downloads[index].isLoading = false;
-      return true;
-    } else {
-      return false;
-    }
+  Future<void> convertVTK(int index) async {
+    List<Record> records = readVtk(_downloads[index].vtk);
+    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
+    _downloads[index].csv = writeCSV(index, dartTrackpoints);
+    _downloads[index].gpx = writeGPX(index, dartTrackpoints);
+    print('Finishing conversions...');
   }
 
   Uint8List writeCSV(int index, List<DartTrackpoint> dartTrackpoints) {

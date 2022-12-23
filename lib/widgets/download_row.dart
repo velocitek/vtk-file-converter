@@ -1,5 +1,6 @@
 import 'dart:typed_data';
-
+import 'dart:isolate';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vtk_converter/widgets/loading_spinner.dart';
@@ -21,19 +22,28 @@ class DownloadRow extends StatefulWidget {
   State<DownloadRow> createState() => _DownloadRowState();
 }
 
+void heavyComputation(int x) {
+  for (int i = 0; i < x; i++) {
+    print(i);
+  }
+}
+
+Future<void> futureFunction(DownloadList downloadList, int index) async {
+  print('Begin computation...');
+  //await Future.delayed(Duration(seconds: 3));
+  return compute(downloadList.convertVTK, index);
+}
+
 class _DownloadRowState extends State<DownloadRow> {
-  late Future<bool> dataFuture;
+  late Future<void> dataFuture;
 
   @override
   void initState() {
     super.initState();
     print('Init state');
-    dataFuture = _convertVTK();
-  }
-
-  Future<bool> _convertVTK() async {
-    return await Provider.of<DownloadList>(context, listen: false)
-        .convertVTK(widget.downloadIndex);
+    DownloadList downloadList =
+        Provider.of<DownloadList>(context, listen: false);
+    dataFuture = futureFunction(downloadList, widget.downloadIndex);
   }
 
   @override
@@ -43,14 +53,13 @@ class _DownloadRowState extends State<DownloadRow> {
     final int index = widget.downloadIndex;
     final String name = widget.name;
     print('Loading widget...');
-    return FutureBuilder<bool>(
+    return FutureBuilder<void>(
       //Initiates conversion while displaying the loading spinner.
       future: dataFuture,
       builder: (context, snapshot) {
         print('Loading builder...');
         //Checks to make sure if both the conversion is done and if it's already occurred so it doesn't reconvert at every state update.
-        if (snapshot.connectionState != ConnectionState.done &&
-            downloadProvider.downloads[index].isLoading) {
+        if (snapshot.connectionState != ConnectionState.done) {
           print('Loading Spinner');
           return const LoadingSpinner();
         } else {
