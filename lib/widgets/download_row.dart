@@ -1,7 +1,7 @@
-import 'dart:typed_data';
-import 'dart:isolate';
+import 'package:isolated_worker/isolated_worker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isolated_worker/js_isolated_worker.dart';
 import 'package:provider/provider.dart';
 import 'package:vtk_converter/widgets/loading_spinner.dart';
 import 'download_button.dart';
@@ -22,15 +22,8 @@ class DownloadRow extends StatefulWidget {
   State<DownloadRow> createState() => _DownloadRowState();
 }
 
-void heavyComputation(int x) {
-  for (int i = 0; i < x; i++) {
-    print(i);
-  }
-}
-
 Future<void> futureFunction(DownloadList downloadList, int index) async {
   print('Begin computation...');
-  //await Future.delayed(Duration(seconds: 3));
   return compute(downloadList.convertVTK, index);
 }
 
