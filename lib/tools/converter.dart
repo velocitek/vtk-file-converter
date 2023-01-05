@@ -61,7 +61,7 @@ class DartTrackpoint {
 
   @override
   String toString() {
-    return '{time: ${time}, sog: ${sog}}';
+    return '{time: $time, sog: $sog}';
   }
 }
 
