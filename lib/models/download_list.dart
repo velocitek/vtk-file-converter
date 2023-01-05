@@ -5,13 +5,63 @@ import 'package:xml/xml.dart';
 import '../tools/command_line_converter/protobuf/vtk.pb.dart';
 import '../tools/converter.dart';
 
+// Map<String, dynamic> convertVTK(Map<String, dynamic> vtkJson){
+
+// }
+
+
 class DownloadData {
-  // Contains information needed to build a download kit.
+
   DownloadData({required this.name, required this.vtk});
   String name;
+  // Bytes from a .vtk file.
   final Uint8List vtk;
+  // Bytes for a .csv file.
   late Uint8List csv;
+  // Bytes for a .gpx file.
   late Uint8List gpx;
+
+  //Sets objects within data as converted.
+  Future<void> convertVTK() async {
+    List<Record> records = readVtk(vtk);
+    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
+    csv = writeCSV(dartTrackpoints);
+    gpx = writeGPX(dartTrackpoints);
+  }
+
+  Uint8List writeCSV(List<DartTrackpoint> dartTrackpoints) {
+    print('Converting to CSV...');
+    String stringBytes = 'time, latitude, longitude, sog, cog,'
+        'q1, q2, q3, q4, mag_heading, heel, pitch\n';
+    for (int i = 0; i < dartTrackpoints.length; i++) {
+      stringBytes += "${dartTrackpoints[i].time}, "
+          "${dartTrackpoints[i].latitude}, "
+          "${dartTrackpoints[i].longitude}, "
+          "${dartTrackpoints[i].sog}, "
+          "${dartTrackpoints[i].cog}, "
+          "${dartTrackpoints[i].quaternion[0]}, "
+          "${dartTrackpoints[i].quaternion[1]}, "
+          "${dartTrackpoints[i].quaternion[2]}, "
+          "${dartTrackpoints[i].quaternion[3]}, "
+          "${dartTrackpoints[i].magHeading}, "
+          "${dartTrackpoints[i].heel}, "
+          "${dartTrackpoints[i].pitch}\n";
+    }
+    Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
+    return csvBytes;
+  }
+
+  Uint8List writeGPX(List<DartTrackpoint> dartTrackpoints) {
+    print('Converting to GPX...');
+    final builder = XmlBuilder();
+    buildGpx(builder, dartTrackpoints);
+    final document = builder.buildDocument();
+    String stringByes = document.toXmlString(pretty: true);
+    Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
+    return gpxBytes;
+
+  }
+
 }
 
 class DownloadList extends ChangeNotifier {
@@ -45,6 +95,10 @@ class DownloadList extends ChangeNotifier {
     _downloads[index].name = newName;
   }
 
+  Future<void> convertVTK(int index) async {
+    return _downloads[index].convertVTK();
+  }
+
   int get downloadCount {
     //Used to set the size of the ListView.
     return _downloads.length;
@@ -56,48 +110,4 @@ class DownloadList extends ChangeNotifier {
     return listSize * 91.00;
   }
 
-  //Sets objects within data as converted.
-  Future<void> convertVTK(int index) async {
-    List<Record> records = readVtk(_downloads[index].vtk);
-    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    _downloads[index].csv = writeCSV(dartTrackpoints);
-    _downloads[index].gpx = writeGPX(dartTrackpoints);
-    print('Finishing conversions...');
-  }
-
-  Uint8List writeCSV(List<DartTrackpoint> dartTrackpoints) {
-    print('Converting to CSV...');
-    String stringBytes = 'time, latitude, longitude, sog, cog,'
-        'q1, q2, q3, q4, mag_heading, heel, pitch\n';
-    for (int i = 0; i < dartTrackpoints.length; i++) {
-      stringBytes += "${dartTrackpoints[i].time}, "
-          "${dartTrackpoints[i].latitude}, "
-          "${dartTrackpoints[i].longitude}, "
-          "${dartTrackpoints[i].sog}, "
-          "${dartTrackpoints[i].cog}, "
-          "${dartTrackpoints[i].quaternion[0]}, "
-          "${dartTrackpoints[i].quaternion[1]}, "
-          "${dartTrackpoints[i].quaternion[2]}, "
-          "${dartTrackpoints[i].quaternion[3]}, "
-          "${dartTrackpoints[i].magHeading}, "
-          "${dartTrackpoints[i].heel}, "
-          "${dartTrackpoints[i].pitch}\n";
-      ;
-    }
-    Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
-    return csvBytes;
-  }
-
-//TODO: VTK to GPX converter.
-  Uint8List writeGPX(List<DartTrackpoint> dartTrackpoints) {
-    print('Converting to GPX...');
-    final builder = XmlBuilder();
-    buildGpx(builder, dartTrackpoints);
-    final document = builder.buildDocument();
-    String stringByes = document.toXmlString(pretty: true);
-    Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
-    // String stringBytes = 'time, latitude, longitude, sog, cog,'
-    //     'q1, q2, q3, q4, mag_heading, heel, pitch\n';
-    return gpxBytes;
-  }
 }
