@@ -189,3 +189,36 @@ void buildGpx(XmlBuilder builder, List<DartTrackpoint> dartTrackpoints) {
     });
   });
 }
+
+Uint8List generateCsvBytes(List<DartTrackpoint> dartTrackpoints) {
+  print('Converting to CSV...');
+  String stringBytes = 'time, latitude, longitude, sog, cog,'
+      'q1, q2, q3, q4, mag_heading, heel, pitch\n';
+  for (int i = 0; i < dartTrackpoints.length; i++) {
+    stringBytes += "${dartTrackpoints[i].time}, "
+        "${dartTrackpoints[i].latitude}, "
+        "${dartTrackpoints[i].longitude}, "
+        "${dartTrackpoints[i].sog}, "
+        "${dartTrackpoints[i].cog}, "
+        "${dartTrackpoints[i].quaternion[0]}, "
+        "${dartTrackpoints[i].quaternion[1]}, "
+        "${dartTrackpoints[i].quaternion[2]}, "
+        "${dartTrackpoints[i].quaternion[3]}, "
+        "${dartTrackpoints[i].magHeading}, "
+        "${dartTrackpoints[i].heel}, "
+        "${dartTrackpoints[i].pitch}\n";
+  }
+  Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
+  return csvBytes;
+}
+
+Uint8List generateGpxBytes(List<DartTrackpoint> dartTrackpoints) {
+  print('Converting to GPX...');
+  final builder = XmlBuilder();
+  buildGpx(builder, dartTrackpoints);
+  final document = builder.buildDocument();
+  String stringByes = document.toXmlString(pretty: true);
+  Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
+  return gpxBytes;
+
+}
