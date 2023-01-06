@@ -158,7 +158,7 @@ Matrix3 matrixFromQuaternion(List<double> q) {
   return Matrix3(m11, m21, m31, m12, m22, m32, m13, m23, m33);
 }
 
-void buildXmlTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
+void buildGpxTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
   builder.element('trkpt', nest: () {
     builder.attribute('lat', '${trackpoint.latitude}');
     builder.attribute('lon', '${trackpoint.longitude}');
@@ -185,7 +185,7 @@ void buildGpx(XmlBuilder builder, List<DartTrackpoint> dartTrackpoints) {
     builder.element('trk', nest: () {
       builder.element('trkseg', nest: () {
         for (int i = 0; i < dartTrackpoints.length; i++) {
-          buildXmlTrackpoint(builder, dartTrackpoints[i]);
+          buildGpxTrackpoint(builder, dartTrackpoints[i]);
         }
       });
     });

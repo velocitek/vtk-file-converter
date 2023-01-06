@@ -52,7 +52,7 @@
 //   sink.close();
 // }
 //
-// void buildXmlTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
+// void buildGpxTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
 //   builder.element('trkpt', nest: () {
 //     builder.attribute('lat', '${trackpoint.latitude}');
 //     builder.attribute('long', '${trackpoint.longitude}');
@@ -79,7 +79,7 @@
 //     builder.element('trk', nest: () {
 //       builder.element('trkseg', nest: () {
 //         for (int i = 0; i < dartTrackpoints.length; i++) {
-//           buildXmlTrackpoint(builder, dartTrackpoints[i]);
+//           buildGpxTrackpoint(builder, dartTrackpoints[i]);
 //         }
 //       });
 //     });
