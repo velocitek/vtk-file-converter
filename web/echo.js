@@ -1,10 +1,3 @@
-simpleFunction = function(string) {
-print(string);
-    /*
-    return {
-        gpx: vtk,
-        csv: vtk 
-    };
-    */
+conversionWorker = function(string) {
    return string;
 }

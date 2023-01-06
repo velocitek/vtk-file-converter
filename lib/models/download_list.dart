@@ -12,7 +12,7 @@ class DownloadData {
   DownloadData({required this.name, required this.vtk});
   String name;
   // Bytes from a .vtk file.
-  final String vtk;
+  final Uint8List vtk;
   // Bytes for a .csv file.
   late Uint8List csv;
   // Bytes for a .gpx file.
@@ -20,11 +20,12 @@ class DownloadData {
 
   //Sets objects within data as converted.
   Future<void> convertVTK() async {
+    final String vtkString = bytesToString(vtk);
     final bool loaded =
         await JsIsolatedWorker().importScripts(['../web/echo.js']);
     if (loaded) {
       debugPrint(await JsIsolatedWorker()
-          .run(functionName: 'conversionWorker', arguments: vtk));
+          .run(functionName: 'conversionWorker', arguments: vtkString));
     } else {
       debugPrint('Web worker is not available');
     }
@@ -33,6 +34,12 @@ class DownloadData {
     // csv = generateCsvBytes(dartTrackpoints);
     // gpx = generateGpxBytes(dartTrackpoints);
   }
+
+  String bytesToString(Uint8List vtk) {
+    final String newString = String.fromCharCodes(vtk!);
+    return newString;
+  }
+//final String uploadString = String.fromCharCodes(uploadBytes!);
 }
 
 class DownloadList extends ChangeNotifier {
@@ -43,7 +50,7 @@ class DownloadList extends ChangeNotifier {
     return UnmodifiableListView(_downloads);
   }
 
-  void addDownload(String name, String vtk) {
+  void addDownload(String name, Uint8List vtk) {
     final newDownload = DownloadData(
       name: name,
       vtk: vtk,
