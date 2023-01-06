@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:isolated_worker/js_isolated_worker.dart';
 import '../tools/protobuf/vtk.pb.dart';
@@ -21,18 +22,29 @@ class DownloadData {
   //Sets objects within data as converted.
   Future<void> convertVTK() async {
     final String vtkString = bytesToString(vtk);
-    final bool loaded =
-        await JsIsolatedWorker().importScripts(['../web/echo.js']);
-    if (loaded) {
-      debugPrint(await JsIsolatedWorker()
-          .run(functionName: 'conversionWorker', arguments: vtkString));
-    } else {
-      debugPrint('Web worker is not available');
-    }
-    // List<Record> records = readVtk(vtk);
-    // List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    // csv = generateCsvBytes(dartTrackpoints);
-    // gpx = generateGpxBytes(dartTrackpoints);
+    dynamic csvAndGpx = jsonDecode(conversionWorker(vtkString));
+    csv = jsonToCsv(csvAndGpx);
+    gpx = jsonToGpx(csvAndGpx);
+    // final bool loaded =
+    //     await JsIsolatedWorker().importScripts(['../web/echo.js']);
+    // if (loaded) {
+    //   debugPrint(await JsIsolatedWorker()
+    //       .run(functionName: 'conversionWorker', arguments: vtkString));
+    // } else {
+    //   debugPrint('Web worker is not available');
+    // }
+  }
+
+  Uint8List jsonToCsv(dynamic json) {
+    final String csvBytesAsString = json['csv'];
+    Uint8List csvBytes = utf8.encode(csvBytesAsString) as Uint8List;
+    return csvBytes;
+  }
+
+  Uint8List jsonToGpx(dynamic json) {
+    final String gpxBytesAsString = json['gpx'];
+    Uint8List gpxBytes = utf8.encode(gpxBytesAsString) as Uint8List;
+    return gpxBytes;
   }
 
   String bytesToString(Uint8List vtk) {
