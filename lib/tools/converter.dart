@@ -4,23 +4,21 @@ import 'command_line_converter/protobuf/vtk.pb.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 
-List<Record> readVtk(Uint8List inputFile) {
-  //final Uint8List fileBytes = inputFile.readAsBytesSync();
+List<Record> readVtk(Uint8List vtkBytes) {
+  //final Uint8List vtkBytes = inputFile.readAsBytesSync();
   print('Reading VTK...');
-  final Uint8List fileBytes = inputFile;
-  //print(fileBytes);
   int i = 0;
-  int length = 0;
+  int packetLength = 0;
   List<Record> records = [];
-  while (i < fileBytes.length) {
+  while (i < vtkBytes.length) {
     // Combine two length bytes to get length as an unsigned 16 bit integer.
-    length = fileBytes[i] + (fileBytes[i + 1] << 8);
+    packetLength = vtkBytes[i] + (vtkBytes[i + 1] << 8);
     i += 2;
-    var data = fileBytes.sublist(i, i + length);
+    var data = vtkBytes.sublist(i, i + packetLength);
     Record r = Record.fromBuffer(data);
     records.add(r);
-    // print('length = $length');
-    i += length;
+    // print('packetLength = $packetLength');
+    i += packetLength;
   }
   return records;
 }
@@ -158,7 +156,7 @@ Matrix3 matrixFromQuaternion(List<double> q) {
   return Matrix3(m11, m21, m31, m12, m22, m32, m13, m23, m33);
 }
 
-void buildXmlTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
+void buildGpxTrackpoint(XmlBuilder builder, DartTrackpoint trackpoint) {
   builder.element('trkpt', nest: () {
     builder.attribute('lat', '${trackpoint.latitude}');
     builder.attribute('lon', '${trackpoint.longitude}');
@@ -185,9 +183,42 @@ void buildGpx(XmlBuilder builder, List<DartTrackpoint> dartTrackpoints) {
     builder.element('trk', nest: () {
       builder.element('trkseg', nest: () {
         for (int i = 0; i < dartTrackpoints.length; i++) {
-          buildXmlTrackpoint(builder, dartTrackpoints[i]);
+          buildGpxTrackpoint(builder, dartTrackpoints[i]);
         }
       });
     });
   });
+}
+
+Uint8List generateCsvBytes(List<DartTrackpoint> dartTrackpoints) {
+  print('Converting to CSV...');
+  String stringBytes = 'time, latitude, longitude, sog, cog,'
+      'q1, q2, q3, q4, mag_heading, heel, pitch\n';
+  for (int i = 0; i < dartTrackpoints.length; i++) {
+    stringBytes += "${dartTrackpoints[i].time}, "
+        "${dartTrackpoints[i].latitude}, "
+        "${dartTrackpoints[i].longitude}, "
+        "${dartTrackpoints[i].sog}, "
+        "${dartTrackpoints[i].cog}, "
+        "${dartTrackpoints[i].quaternion[0]}, "
+        "${dartTrackpoints[i].quaternion[1]}, "
+        "${dartTrackpoints[i].quaternion[2]}, "
+        "${dartTrackpoints[i].quaternion[3]}, "
+        "${dartTrackpoints[i].magHeading}, "
+        "${dartTrackpoints[i].heel}, "
+        "${dartTrackpoints[i].pitch}\n";
+  }
+  Uint8List csvBytes = utf8.encode(stringBytes) as Uint8List;
+  return csvBytes;
+}
+
+Uint8List generateGpxBytes(List<DartTrackpoint> dartTrackpoints) {
+  print('Converting to GPX...');
+  final builder = XmlBuilder();
+  buildGpx(builder, dartTrackpoints);
+  final document = builder.buildDocument();
+  String stringByes = document.toXmlString(pretty: true);
+  Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
+  return gpxBytes;
+
 }
