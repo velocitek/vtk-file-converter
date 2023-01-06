@@ -1,8 +1,19 @@
 import 'dart:math';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'command_line_converter/protobuf/vtk.pb.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
+
+String conversionWorker(String vtkBytesAsString) {
+  Uint8List vtkBytes = Uint8List.fromList(vtkBytesAsString.codeUnits);
+  List<Record> records = readVtk(vtkBytes);
+  List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
+  Uint8List csvBytes = generateCsvBytes(dartTrackpoints);
+  Uint8List gpxBytes = generateGpxBytes(dartTrackpoints);
+  String csvAndGpxAsJsonString = generateCsvAndGpxAsJsonString(csvBytes, gpxBytes);
+  return csvAndGpxAsJsonString;
+}
 
 List<Record> readVtk(Uint8List vtkBytes) {
   //final Uint8List vtkBytes = inputFile.readAsBytesSync();
@@ -221,4 +232,12 @@ Uint8List generateGpxBytes(List<DartTrackpoint> dartTrackpoints) {
   Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
   return gpxBytes;
 
+}
+
+String generateCsvAndGpxAsJsonString(csvBytes, gpxBytes){
+  final String csvBytesAsString = String.fromCharCodes(csvBytes);
+  final String gpxBytesAsString = String.fromCharCodes(gpxBytes);
+  final data = {'csv': csvBytesAsString, 'gpx': gpxBytesAsString};
+  final String jsonString = jsonEncode(data);
+  return jsonString;
 }
