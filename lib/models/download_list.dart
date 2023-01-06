@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:isolated_worker/js_isolated_worker.dart';
-import '../tools/command_line_converter/protobuf/vtk.pb.dart';
+import '../tools/protobuf/vtk.pb.dart';
 import '../tools/converter.dart';
 
 // Map<String, dynamic> convertVTK(Map<String, dynamic> vtkJson){

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'command_line_converter/protobuf/vtk.pb.dart';
+import 'protobuf/vtk.pb.dart';
 import 'converter.dart';
 /*
 main(List arguments) {

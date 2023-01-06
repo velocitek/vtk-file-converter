@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'command_line_converter/protobuf/vtk.pb.dart';
+import 'protobuf/vtk.pb.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 
