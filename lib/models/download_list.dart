@@ -1,7 +1,5 @@
 import 'dart:collection';
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:xml/xml.dart';
 import '../tools/command_line_converter/protobuf/vtk.pb.dart';
 import '../tools/converter.dart';
 
@@ -28,7 +26,6 @@ class DownloadData {
     csv = generateCsvBytes(dartTrackpoints);
     gpx = generateGpxBytes(dartTrackpoints);
   }
-
 
 }
 
