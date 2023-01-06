@@ -4,23 +4,21 @@ import 'command_line_converter/protobuf/vtk.pb.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 
-List<Record> readVtk(Uint8List inputFile) {
-  //final Uint8List fileBytes = inputFile.readAsBytesSync();
+List<Record> readVtk(Uint8List vtkBytes) {
+  //final Uint8List vtkBytes = inputFile.readAsBytesSync();
   print('Reading VTK...');
-  final Uint8List fileBytes = inputFile;
-  //print(fileBytes);
   int i = 0;
-  int length = 0;
+  int packetLength = 0;
   List<Record> records = [];
-  while (i < fileBytes.length) {
+  while (i < vtkBytes.length) {
     // Combine two length bytes to get length as an unsigned 16 bit integer.
-    length = fileBytes[i] + (fileBytes[i + 1] << 8);
+    packetLength = vtkBytes[i] + (vtkBytes[i + 1] << 8);
     i += 2;
-    var data = fileBytes.sublist(i, i + length);
+    var data = vtkBytes.sublist(i, i + packetLength);
     Record r = Record.fromBuffer(data);
     records.add(r);
-    // print('length = $length');
-    i += length;
+    // print('packetLength = $packetLength');
+    i += packetLength;
   }
   return records;
 }
