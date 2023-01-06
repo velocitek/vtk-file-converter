@@ -11,7 +11,8 @@ String conversionWorker(String vtkBytesAsString) {
   List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
   Uint8List csvBytes = generateCsvBytes(dartTrackpoints);
   Uint8List gpxBytes = generateGpxBytes(dartTrackpoints);
-  String csvAndGpxAsJsonString = generateCsvAndGpxAsJsonString(csvBytes, gpxBytes);
+  String csvAndGpxAsJsonString =
+      generateCsvAndGpxAsJsonString(csvBytes, gpxBytes);
   return csvAndGpxAsJsonString;
 }
 
@@ -231,10 +232,9 @@ Uint8List generateGpxBytes(List<DartTrackpoint> dartTrackpoints) {
   String stringByes = document.toXmlString(pretty: true);
   Uint8List gpxBytes = utf8.encode(stringByes) as Uint8List;
   return gpxBytes;
-
 }
 
-String generateCsvAndGpxAsJsonString(csvBytes, gpxBytes){
+String generateCsvAndGpxAsJsonString(csvBytes, gpxBytes) {
   final String csvBytesAsString = String.fromCharCodes(csvBytes);
   final String gpxBytesAsString = String.fromCharCodes(gpxBytes);
   final data = {'csv': csvBytesAsString, 'gpx': gpxBytesAsString};

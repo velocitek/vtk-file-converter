@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
+import 'package:isolated_worker/js_isolated_worker.dart';
 import '../tools/command_line_converter/protobuf/vtk.pb.dart';
 import '../tools/converter.dart';
 
@@ -7,13 +8,11 @@ import '../tools/converter.dart';
 
 // }
 
-
 class DownloadData {
-
   DownloadData({required this.name, required this.vtk});
   String name;
   // Bytes from a .vtk file.
-  final Uint8List vtk;
+  final String vtk;
   // Bytes for a .csv file.
   late Uint8List csv;
   // Bytes for a .gpx file.
@@ -21,12 +20,19 @@ class DownloadData {
 
   //Sets objects within data as converted.
   Future<void> convertVTK() async {
-    List<Record> records = readVtk(vtk);
-    List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
-    csv = generateCsvBytes(dartTrackpoints);
-    gpx = generateGpxBytes(dartTrackpoints);
+    final bool loaded =
+        await JsIsolatedWorker().importScripts(['../web/echo.js']);
+    if (loaded) {
+      debugPrint(await JsIsolatedWorker()
+          .run(functionName: 'conversionWorker', arguments: vtk));
+    } else {
+      debugPrint('Web worker is not available');
+    }
+    // List<Record> records = readVtk(vtk);
+    // List<DartTrackpoint> dartTrackpoints = vtkRecordsToDartTrackpoints(records);
+    // csv = generateCsvBytes(dartTrackpoints);
+    // gpx = generateGpxBytes(dartTrackpoints);
   }
-
 }
 
 class DownloadList extends ChangeNotifier {
@@ -37,7 +43,7 @@ class DownloadList extends ChangeNotifier {
     return UnmodifiableListView(_downloads);
   }
 
-  void addDownload(String name, var vtk) {
+  void addDownload(String name, String vtk) {
     final newDownload = DownloadData(
       name: name,
       vtk: vtk,
@@ -74,5 +80,4 @@ class DownloadList extends ChangeNotifier {
     int listSize = _downloads.length;
     return listSize * 91.00;
   }
-
 }
