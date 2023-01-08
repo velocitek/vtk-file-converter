@@ -11,9 +11,11 @@ import 'package:js/js.dart';
 
 
 
+/*
 main(){
   allowInterop(conversionWorker);
 }
+*/
 
 @JS('conversionWorker')
 String conversionWorker(String vtkBytesAsString) {
