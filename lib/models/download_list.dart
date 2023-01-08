@@ -22,17 +22,19 @@ class DownloadData {
   //Sets objects within data as converted.
   Future<void> convertVTK() async {
     final String vtkString = bytesToString(vtk);
-    dynamic csvAndGpx = jsonDecode(conversionWorker(vtkString));
-    csv = jsonToCsv(csvAndGpx);
-    gpx = jsonToGpx(csvAndGpx);
-    // final bool loaded =
-    //     await JsIsolatedWorker().importScripts(['../web/echo.js']);
-    // if (loaded) {
-    //   debugPrint(await JsIsolatedWorker()
-    //       .run(functionName: 'conversionWorker', arguments: vtkString));
-    // } else {
-    //   debugPrint('Web worker is not available');
-    // }
+    // dynamic csvAndGpx = jsonDecode(conversionWorker(vtkString));
+    final bool loaded =
+        await JsIsolatedWorker().importScripts(['../web/converter.js']);
+    if (loaded) {
+      final String csvAndGpxString = await JsIsolatedWorker()
+          .run(functionName: 'conversionWorker', arguments: vtkString);
+      dynamic csvAndGpx = jsonDecode(csvAndGpxString);
+      csv = jsonToCsv(csvAndGpx);
+      gpx = jsonToGpx(csvAndGpx);
+      
+    } else {
+      debugPrint('Web worker is not available');
+    }
   }
 
   Uint8List jsonToCsv(dynamic json) {
