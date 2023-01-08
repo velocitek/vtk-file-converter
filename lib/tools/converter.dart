@@ -1,10 +1,21 @@
+@JS()
+library callable_function;
+
 import 'dart:math';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'protobuf/vtk.pb.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
+import 'package:js/js.dart';
 
+
+
+main(){
+  allowInterop(conversionWorker);
+}
+
+@JS('conversionWorker')
 String conversionWorker(String vtkBytesAsString) {
   Uint8List vtkBytes = Uint8List.fromList(vtkBytesAsString.codeUnits);
   List<Record> records = readVtk(vtkBytes);
