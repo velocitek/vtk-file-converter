@@ -14,13 +14,14 @@ class DownloadCSV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final downloadProvider =
-        Provider.of<DownloadList>(context, listen: false).downloads[index];
+        Provider.of<DownloadList>(context, listen: true).downloads[index];
     return ElevatedButton(
       style: kButtonCSV,
-      onPressed: () {
+      onPressed: () async {
         String name = downloadProvider.name;
         print('Downloading $name...');
-        FileSaver.instance.saveFile('$name.csv', downloadProvider.csv, 'CSV');
+        await FileSaver.instance
+            .saveFile('$name.csv', downloadProvider.csv, 'CSV');
       },
       child: const Text(
         'DOWNLOAD CSV',
@@ -40,13 +41,14 @@ class DownloadGPX extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final downloadProvider =
-        Provider.of<DownloadList>(context, listen: false).downloads[index];
+        Provider.of<DownloadList>(context, listen: true).downloads[index];
     return ElevatedButton(
       style: kButtonGPX,
-      onPressed: () {
+      onPressed: () async {
         String name = downloadProvider.name;
         print('Downloading $name...');
-        FileSaver.instance.saveFile('$name.gpx', downloadProvider.gpx, 'GPX');
+        await FileSaver.instance
+            .saveFile('$name.gpx', downloadProvider.gpx, 'GPX');
       },
       child: const Text(
         'DOWNLOAD GPX',

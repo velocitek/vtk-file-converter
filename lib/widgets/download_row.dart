@@ -8,6 +8,7 @@ import 'download_button.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 
+//TODO: When deleting one entry, the download interface has to reconvert and recompile all the rest of the elements. It should not have to do that. This might have to do with how deleting an object moves all objects ahead of it down by one.
 class DownloadRow extends StatefulWidget {
   const DownloadRow({
     super.key,
@@ -24,7 +25,7 @@ class DownloadRow extends StatefulWidget {
 
 Future<void> futureFunction(DownloadList downloadList, int index) async {
   print('Begin computation...');
-  return ;
+  return;
 }
 
 class _DownloadRowState extends State<DownloadRow> {
