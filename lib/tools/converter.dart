@@ -9,13 +9,9 @@ import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 import 'package:js/js.dart';
 
-
-
-/*
 main(){
   allowInterop(conversionWorker);
 }
-*/
 
 @JS('conversionWorker')
 String conversionWorker(String vtkBytesAsString) {
