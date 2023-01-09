@@ -23,11 +23,6 @@ class DownloadRow extends StatefulWidget {
   State<DownloadRow> createState() => _DownloadRowState();
 }
 
-Future<void> futureFunction(DownloadList downloadList, int index) async {
-  print('Begin computation...');
-  return;
-}
-
 class _DownloadRowState extends State<DownloadRow> {
   late Future<void> dataFuture;
 
@@ -37,7 +32,7 @@ class _DownloadRowState extends State<DownloadRow> {
     print('Init state');
     DownloadList downloadList =
         Provider.of<DownloadList>(context, listen: false);
-    dataFuture = downloadList.convertVTK(widget.downloadIndex);
+    dataFuture = downloadList.checkConversion(widget.downloadIndex);
   }
 
   @override

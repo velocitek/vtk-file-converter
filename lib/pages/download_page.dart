@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vtk_converter/widgets/loading_spinner.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 import '../widgets/download_listview.dart';
 import '../widgets/upload_file.dart';
 
-class DownloadPage extends StatelessWidget {
+class DownloadPage extends StatefulWidget {
   const DownloadPage({super.key});
 
   @override
+  State<DownloadPage> createState() => _DownloadPageState();
+}
+
+class _DownloadPageState extends State<DownloadPage> {
+  @override
   Widget build(BuildContext context) {
+    bool isConverting =
+        Provider.of<DownloadList>(context, listen: true).isConverting;
     return Material(
       child: Container(
         alignment: Alignment.center,
@@ -50,6 +58,10 @@ class DownloadPage extends StatelessWidget {
                     Provider.of<DownloadList>(context, listen: true).listSize,
                 child: DownloadListView(),
               ),
+              if (isConverting)
+                SizedBox(
+                  child: LoadingSpinner(),
+                ),
               SizedBox(
                 width: 1005.0,
                 child: Row(

@@ -10,17 +10,70 @@ import '../tools/converter.dart';
 // }
 
 class DownloadData {
-  DownloadData({required this.name, required this.vtk});
+  DownloadData(
+      {required this.name,
+      required this.csv,
+      required this.gpx,
+      required this.isConverted});
   String name;
-  // Bytes from a .vtk file.
-  final Uint8List vtk;
   // Bytes for a .csv file.
-  late Uint8List csv;
+  final Uint8List csv;
   // Bytes for a .gpx file.
-  late Uint8List gpx;
+  final Uint8List gpx;
+  final bool isConverted;
 
   //Sets objects within data as converted.
-  Future<void> convertVTK() async {
+  // Future<void> convertVTK() async {
+  //   final String vtkString = bytesToString(vtk);
+  //   final bool loaded =
+  //       await JsIsolatedWorker().importScripts(['../web/converter.js']);
+  //   if (loaded) {
+  //     final String csvAndGpxString = await JsIsolatedWorker()
+  //         .run(functionName: 'conversionWorker', arguments: vtkString);
+  //     dynamic csvAndGpx = jsonDecode(csvAndGpxString);
+  //     csv = jsonToCsv(csvAndGpx);
+  //     gpx = jsonToGpx(csvAndGpx);
+  //   } else {
+  //     debugPrint('Web worker is not available');
+  //   }
+  // }
+
+  // Uint8List jsonToCsv(dynamic json) {
+  //   final String csvBytesAsString = json['csv'];
+  //   Uint8List csvBytes = utf8.encode(csvBytesAsString) as Uint8List;
+  //   return csvBytes;
+  // }
+  //
+  // Uint8List jsonToGpx(dynamic json) {
+  //   final String gpxBytesAsString = json['gpx'];
+  //   Uint8List gpxBytes = utf8.encode(gpxBytesAsString) as Uint8List;
+  //   return gpxBytes;
+  // }
+  //
+  // String bytesToString(Uint8List vtk) {
+  //   final String newString = String.fromCharCodes(vtk!);
+  //   return newString;
+  // }
+//final String uploadString = String.fromCharCodes(uploadBytes!);
+}
+
+class DownloadList extends ChangeNotifier {
+  // Holds a set of download kits to be displayed in DownloadPage
+  final List<DownloadData> _downloads = [];
+  bool isConverting = false;
+
+  UnmodifiableListView<DownloadData> get downloads {
+    return UnmodifiableListView(_downloads);
+  }
+
+  //TODO: Conversion should begin here as to not reconvert every file when the list changes
+  Future<void> addDownload(String name, Uint8List vtk) async {
+    print('Adding download...');
+    if (downloadCount == 3) {
+      deleteDownload(0);
+    }
+    isConverting = true;
+    notifyListeners();
     final String vtkString = bytesToString(vtk);
     final bool loaded =
         await JsIsolatedWorker().importScripts(['../web/converter.js']);
@@ -28,12 +81,26 @@ class DownloadData {
       final String csvAndGpxString = await JsIsolatedWorker()
           .run(functionName: 'conversionWorker', arguments: vtkString);
       dynamic csvAndGpx = jsonDecode(csvAndGpxString);
-      csv = jsonToCsv(csvAndGpx);
-      gpx = jsonToGpx(csvAndGpx);
-      
+      final newDownload = DownloadData(
+        name: name,
+        csv: jsonToCsv(csvAndGpx),
+        gpx: jsonToGpx(csvAndGpx),
+        isConverted: true,
+      );
+      _downloads.add(newDownload);
     } else {
       debugPrint('Web worker is not available');
     }
+    //Deletes first entry when uploading a fourth file.
+
+    print('Download added');
+    isConverting = false;
+    notifyListeners();
+  }
+
+  String bytesToString(Uint8List vtk) {
+    final String newString = String.fromCharCodes(vtk!);
+    return newString;
   }
 
   Uint8List jsonToCsv(dynamic json) {
@@ -48,34 +115,6 @@ class DownloadData {
     return gpxBytes;
   }
 
-  String bytesToString(Uint8List vtk) {
-    final String newString = String.fromCharCodes(vtk!);
-    return newString;
-  }
-//final String uploadString = String.fromCharCodes(uploadBytes!);
-}
-
-class DownloadList extends ChangeNotifier {
-  // Holds a set of download kits to be displayed in DownloadPage
-  final List<DownloadData> _downloads = [];
-
-  UnmodifiableListView<DownloadData> get downloads {
-    return UnmodifiableListView(_downloads);
-  }
-
-  void addDownload(String name, Uint8List vtk) {
-    final newDownload = DownloadData(
-      name: name,
-      vtk: vtk,
-    );
-    //Deletes first entry when uploading a fourth file.
-    if (downloadCount == 3) {
-      deleteDownload(0);
-    }
-    _downloads.add(newDownload);
-    notifyListeners();
-  }
-
   void deleteDownload(int index) {
     print('Deleting file...');
     _downloads.remove(_downloads[index]);
@@ -86,8 +125,17 @@ class DownloadList extends ChangeNotifier {
     _downloads[index].name = newName;
   }
 
-  Future<void> convertVTK(int index) async {
-    return _downloads[index].convertVTK();
+  // Future<void> convertVTK(int index) async {
+  //   return _downloads[index].convertVTK();
+  // }
+
+  bool getConversion() {
+    return isConverting;
+  }
+
+  Future<bool> checkConversion(int index) async {
+    print('Checking conversion status');
+    return _downloads[index].isConverted;
   }
 
   int get downloadCount {

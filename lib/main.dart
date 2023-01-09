@@ -20,5 +20,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//TODO: Use mixins for widgets
