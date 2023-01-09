@@ -1,13 +1,10 @@
+import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:isolated_worker/js_isolated_worker.dart';
-import '../tools/protobuf/vtk.pb.dart';
-import '../tools/converter.dart';
-
-// Map<String, dynamic> convertVTK(Map<String, dynamic> vtkJson){
-
-// }
+import '../pages/download_page.dart';
+import '../pages/upload_page.dart';
 
 class DownloadData {
   DownloadData({
@@ -25,15 +22,16 @@ class DownloadData {
 class DownloadList extends ChangeNotifier {
   // Holds a set of download kits to be displayed in DownloadPage
   final List<DownloadData> _downloads = [];
+  Widget pageSelector = const UploadPage();
   bool isConverting = false;
 
   UnmodifiableListView<DownloadData> get downloads {
     return UnmodifiableListView(_downloads);
   }
 
-  //TODO: Conversion should begin here as to not reconvert every file when the list changes
   Future<void> addDownload(String name, Uint8List vtk) async {
     print('Adding download...');
+    pageSelector = const DownloadPage();
     if (downloadCount == 3) {
       deleteDownload(0);
     }

@@ -16,7 +16,6 @@ Future uploadFile(BuildContext context) async {
   final PlatformFile upload = result.files.first;
   final Uint8List? uploadBytes = result.files.single.bytes;
 
-  //Passes only the file's data and name as arguments, discarding the rest.
   downloadProvider.addDownload(
       upload.name.substring(0, upload.name.length - 4), uploadBytes!);
 }

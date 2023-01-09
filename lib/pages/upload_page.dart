@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'download_page.dart';
 import '../tools/constants.dart';
 import '../widgets/upload_file.dart';
 
@@ -15,6 +14,9 @@ class UploadPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 40.0,
+              ),
               const Text(
                 'VELOCITEK',
                 style: kTitleText,
@@ -59,12 +61,6 @@ class UploadPage extends StatelessWidget {
                 onPressed: () async {
                   //File upload widget.
                   await uploadFile(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DownloadPage(),
-                    ),
-                  );
                 },
                 child: const Text('UPLOAD VTK FILE', style: kButtonText),
               ),

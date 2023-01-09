@@ -36,6 +36,19 @@ const kTextfieldFont = TextStyle(
   color: kBlack,
 );
 
+const kDescriptionTitle = TextStyle(
+  fontSize: 36.0,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'Roboto',
+  color: kBlack,
+);
+
+const kDescriptionText = TextStyle(
+  fontSize: 18.0,
+  fontWeight: FontWeight.normal,
+  color: kBlack,
+);
+
 const kReupload = TextStyle(
   fontSize: 16.0,
   color: kBlue,

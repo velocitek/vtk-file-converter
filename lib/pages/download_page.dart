@@ -58,7 +58,8 @@ class _DownloadPageState extends State<DownloadPage> {
                 child: DownloadListView(),
               ),
               if (isConverting)
-                SizedBox(
+                const SizedBox(
+                  height: 91.0,
                   child: LoadingSpinner(),
                 ),
               SizedBox(
