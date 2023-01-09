@@ -10,51 +10,16 @@ import '../tools/converter.dart';
 // }
 
 class DownloadData {
-  DownloadData(
-      {required this.name,
-      required this.csv,
-      required this.gpx,
-      required this.isConverted});
+  DownloadData({
+    required this.name,
+    required this.csv,
+    required this.gpx,
+  });
   String name;
   // Bytes for a .csv file.
   final Uint8List csv;
   // Bytes for a .gpx file.
   final Uint8List gpx;
-  final bool isConverted;
-
-  //Sets objects within data as converted.
-  // Future<void> convertVTK() async {
-  //   final String vtkString = bytesToString(vtk);
-  //   final bool loaded =
-  //       await JsIsolatedWorker().importScripts(['../web/converter.js']);
-  //   if (loaded) {
-  //     final String csvAndGpxString = await JsIsolatedWorker()
-  //         .run(functionName: 'conversionWorker', arguments: vtkString);
-  //     dynamic csvAndGpx = jsonDecode(csvAndGpxString);
-  //     csv = jsonToCsv(csvAndGpx);
-  //     gpx = jsonToGpx(csvAndGpx);
-  //   } else {
-  //     debugPrint('Web worker is not available');
-  //   }
-  // }
-
-  // Uint8List jsonToCsv(dynamic json) {
-  //   final String csvBytesAsString = json['csv'];
-  //   Uint8List csvBytes = utf8.encode(csvBytesAsString) as Uint8List;
-  //   return csvBytes;
-  // }
-  //
-  // Uint8List jsonToGpx(dynamic json) {
-  //   final String gpxBytesAsString = json['gpx'];
-  //   Uint8List gpxBytes = utf8.encode(gpxBytesAsString) as Uint8List;
-  //   return gpxBytes;
-  // }
-  //
-  // String bytesToString(Uint8List vtk) {
-  //   final String newString = String.fromCharCodes(vtk!);
-  //   return newString;
-  // }
-//final String uploadString = String.fromCharCodes(uploadBytes!);
 }
 
 class DownloadList extends ChangeNotifier {
@@ -85,7 +50,6 @@ class DownloadList extends ChangeNotifier {
         name: name,
         csv: jsonToCsv(csvAndGpx),
         gpx: jsonToGpx(csvAndGpx),
-        isConverted: true,
       );
       _downloads.add(newDownload);
     } else {
@@ -131,11 +95,6 @@ class DownloadList extends ChangeNotifier {
 
   bool getConversion() {
     return isConverting;
-  }
-
-  Future<bool> checkConversion(int index) async {
-    print('Checking conversion status');
-    return _downloads[index].isConverted;
   }
 
   int get downloadCount {

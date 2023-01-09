@@ -27,30 +27,29 @@ class _DownloadPageState extends State<DownloadPage> {
           child: Column(
             children: [
               const Text(
-                'READY TO DOWNLOAD?',
+                'READY TO CONVERT?',
                 style: kTitleText,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 20.0,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 770.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'YOUR SELECTION',
-                      style: kSubtitleText,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      height: 4.0,
-                      width: 190.0,
-                      color: kBlue,
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  const Text(
+                    'YOUR SELECTION',
+                    style: kSubtitleText,
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    height: 4.0,
+                    width: 190.0,
+                    color: kBlue,
+                  ),
+                ],
               ),
               const SizedBox(height: 15.0),
               SizedBox(
