@@ -1,3 +1,34 @@
+// Use this file to create a Javascript web worker to convert data from a
+// vtk file to data for csv and gpx files using the conversionWorker function.
+//
+// This allows the conversion to happen on a separate thread from the UI
+// and prevents the UI from freezing.
+//
+// Here are the steps to make a Javascript web worker out of this file:
+//
+// 1. Uncomment the main function.
+//
+// 2. Compile the file to Javascript using: 
+//    $ dart compile js converter.dart -o converter.js
+//
+// 3. Manually edit the compiler generated file converter.js:
+//      a. Delete this line at the top of the file:
+//
+//            (function dartProgram() {
+//
+//         and the line at the bottom of the file with 
+//         the corresponding closing brace:
+//
+//           })();
+//
+//      b. Add this wrapper function at the top of converter.js
+//        
+//          function conversionWorker(vtkBytesAsString) {
+//            return A.conversionWorker(vtkBytesAsString);
+//          }    
+//
+// 4. Move converter.js to the web folder.
+
 @JS()
 library callable_function;
 
@@ -9,9 +40,11 @@ import 'package:vector_math/vector_math.dart';
 import 'package:xml/xml.dart';
 import 'package:js/js.dart';
 
+/*
 main(){
   allowInterop(conversionWorker);
 }
+*/
 
 @JS('conversionWorker')
 String conversionWorker(String vtkBytesAsString) {
