@@ -82,13 +82,13 @@ class _DownloadRowState extends State<DownloadRow> {
         const SizedBox(
           width: 50.0,
         ),
-        DownloadCSV(
+        DownloadGPX(
           index: index,
         ),
         const SizedBox(
           width: 20.0,
         ),
-        DownloadGPX(
+        DownloadCSV(
           index: index,
         ),
       ],

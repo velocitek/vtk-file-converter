@@ -1,68 +1,95 @@
 import 'package:flutter/material.dart';
-import '../tools/constants.dart';
 import '../models/service_list.dart';
+import '../tools/constants.dart';
+import 'compatibility_widgets.dart';
 
 class CompatibilityChart extends StatelessWidget {
   const CompatibilityChart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Container(
-          color: kDarkBlue,
-          child: const Text(
-            "REPLAY\nSERVICE",
-            style: kWarningText,
-            textAlign: TextAlign.center,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              color: kDarkBlue,
+              height: 60.0,
+              width: 180.0,
+              child: const Center(
+                child: Text(
+                  "REPLAY\nSERVICE",
+                  style: kWarningText,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const TopRow(
+              widgetText: "ACCEPTS\nVTK",
+            ),
+            const TopRow(
+              widgetText: "ACCEPTS\nGPX",
+            ),
+            const TopRow(
+              widgetText: "ACCEPTS\nCSV",
+            ),
+            const TopRow(
+              widgetText: "PAID\nSERVICE",
+            ),
+          ],
         ),
-        const TopRow(
-          widgetText: "ACCEPTS VTK",
+        ServiceRow(
+          data: ServiceList().getServiceData(0),
         ),
-        const TopRow(
-          widgetText: "ACCEPTS GPX",
+        ServiceRow(
+          data: ServiceList().getServiceData(1),
         ),
-        const TopRow(
-          widgetText: "ACCEPTS CSV",
+        ServiceRow(
+          data: ServiceList().getServiceData(2),
         ),
-        const TopRow(
-          widgetText: "PAID SERVICE",
+        ServiceRow(
+          data: ServiceList().getServiceData(3),
         ),
-      ],
-    );
-  }
-}
-
-class TopRow extends StatelessWidget {
-  const TopRow({
-    super.key,
-    required this.widgetText,
-  });
-  final String widgetText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: kDarkBlue,
-      width: 70.0,
-      child: Text(widgetText, style: kWarningText, textAlign: TextAlign.center),
-    );
-  }
-}
-
-class ServiceRow extends StatelessWidget {
-  const ServiceRow({super.key, required this.data});
-  final ServiceData data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          color: kBlue,
-          child: Text(data.serviceText),
-        )
+        ServiceRow(
+          data: ServiceList().getServiceData(4),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(5),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(6),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(7),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(8),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(9),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(10),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(11),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(12),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(13),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(14),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(15),
+        ),
+        ServiceRow(
+          data: ServiceList().getServiceData(16),
+        ),
       ],
     );
   }

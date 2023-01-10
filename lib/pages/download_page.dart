@@ -58,9 +58,19 @@ class _DownloadPageState extends State<DownloadPage> {
                 child: DownloadListView(),
               ),
               if (isConverting)
-                const SizedBox(
+                SizedBox(
                   height: 91.0,
-                  child: LoadingSpinner(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text("Converting .VTK into .GPX and .CSV...",
+                          style: kSubtitleText),
+                      SizedBox(
+                        width: 50.0,
+                      ),
+                      LoadingSpinner(),
+                    ],
+                  ),
                 ),
               SizedBox(
                 width: 1005.0,

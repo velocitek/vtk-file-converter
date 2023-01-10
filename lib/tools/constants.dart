@@ -64,11 +64,11 @@ final kButtonStyle = ElevatedButton.styleFrom(
 );
 
 final kButtonCSV = kButtonStyle.copyWith(
-  backgroundColor: MaterialStateProperty.all(kOrange),
+  backgroundColor: MaterialStateProperty.all(kBlue2),
 );
 
 final kButtonGPX = kButtonStyle.copyWith(
-  backgroundColor: MaterialStateProperty.all(kBlue2),
+  backgroundColor: MaterialStateProperty.all(kOrange),
 );
 
 // final kCancelButtonStyle = ElevatedButton.styleFrom(
