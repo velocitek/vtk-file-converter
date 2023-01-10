@@ -75,6 +75,13 @@ const kDescriptionText = TextStyle(
   color: kBlack,
 );
 
+const kLinkText = TextStyle(
+  fontSize: 18.0,
+  fontWeight: FontWeight.w500,
+  decoration: TextDecoration.underline,
+  color: kBlue,
+);
+
 const kReupload = TextStyle(
   fontSize: 16.0,
   color: kBlue,

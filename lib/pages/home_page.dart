@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 import '../widgets/compatibility_chart.dart';
+import '../widgets/description_widgets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,30 +27,14 @@ class HomePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 600.0,
                       child: Center(
-                          child: SizedBox(
-                        width: 550.0,
-                        child: Column(
-                          children: const [
-                            Text(
-                              ".VTK, .GPX, AND .CSV?\nWHICH IS BEST FOR ME?",
-                              style: kDescriptionTitle,
-                            ),
-                            SizedBox(
-                              height: 50.0,
-                            ),
-                            Text(
-                              "Utilizing a VTK file(s) or converting your files to GPX or CSV gives you the flexibility to view your data on many paid and unpaid platforms.",
-                              style: kDescriptionText,
-                            ),
-                            SizedBox(
-                              height: 70.0,
-                            ),
-                          ],
+                        child: SizedBox(
+                          width: 500.0,
+                          child: DescriptionBlock(),
                         ),
-                      )),
+                      ),
                     ),
                     SizedBox(
                       width: 600.0,
