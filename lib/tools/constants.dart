@@ -6,16 +6,42 @@ const kDarkBlue = Color(0xFF10253E);
 const kOrange = Color(0xFFD7A500);
 const kWhite = Colors.white;
 const kBlack = Colors.black;
+const kChartBlue = Color(0xFF454F64);
+const kChartGrid = Color(0xFF9BA3B4);
 
+//Used for the big titles on the conversion app.
 const kTitleText = TextStyle(
   fontSize: 64.0,
   fontFamily: 'Roboto',
-  fontWeight: FontWeight.bold,
+  fontWeight: FontWeight.w700,
   color: kWhite,
 );
+
+//For the 3 files max warning
 const kWarningText = TextStyle(
   fontSize: 16.0,
   fontFamily: 'Roboto',
+  color: kWhite,
+);
+
+const kChartTitle = TextStyle(
+  fontSize: 32.0,
+  fontFamily: 'Roboto',
+  fontWeight: FontWeight.w900,
+  color: kBlack,
+);
+
+const kChartLabels = TextStyle(
+  fontSize: 14.0,
+  fontFamily: 'Roboto',
+  fontWeight: FontWeight.w600,
+  color: kWhite,
+);
+
+const kChartLinks = TextStyle(
+  fontSize: 14.0,
+  fontFamily: 'Roboto',
+  fontWeight: FontWeight.w200,
   color: kWhite,
 );
 
@@ -37,15 +63,15 @@ const kTextfieldFont = TextStyle(
 );
 
 const kDescriptionTitle = TextStyle(
-  fontSize: 36.0,
-  fontWeight: FontWeight.bold,
+  fontSize: 40.0,
+  fontWeight: FontWeight.w900,
   fontFamily: 'Roboto',
   color: kBlack,
 );
 
 const kDescriptionText = TextStyle(
   fontSize: 18.0,
-  fontWeight: FontWeight.normal,
+  fontWeight: FontWeight.w500,
   color: kBlack,
 );
 
@@ -70,14 +96,3 @@ final kButtonCSV = kButtonStyle.copyWith(
 final kButtonGPX = kButtonStyle.copyWith(
   backgroundColor: MaterialStateProperty.all(kOrange),
 );
-
-// final kCancelButtonStyle = ElevatedButton.styleFrom(
-//   side: const BorderSide(color: kBlue, width: 3.0),
-//   backgroundColor: kWhite,
-//   elevation: 0.0,
-//   padding: const EdgeInsets.symmetric(vertical: 30),
-//   fixedSize: const Size.fromWidth(250.0),
-//   shape: RoundedRectangleBorder(
-//     borderRadius: BorderRadius.circular(30),
-//   ),
-// );

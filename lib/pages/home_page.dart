@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../models/download_list.dart';
 import '../tools/constants.dart';
 import '../widgets/compatibility_chart.dart';
-import 'package:url_launcher/link.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -62,11 +61,14 @@ class HomePage extends StatelessWidget {
                               child: Center(
                                 child: Text(
                                   "REPLAY COMPATIBILITY CHART",
-                                  style: kDescriptionTitle,
+                                  style: kChartTitle,
                                 ),
                               ),
                             ),
-                            CompatibilityChart(),
+                            Material(
+                              elevation: 12,
+                              child: CompatibilityChart(),
+                            ),
                           ],
                         ),
                       ),

@@ -14,13 +14,13 @@ class CompatibilityChart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              color: kDarkBlue,
+              color: kChartBlue,
               height: 60.0,
               width: 180.0,
               child: const Center(
                 child: Text(
                   "REPLAY\nSERVICE",
-                  style: kWarningText,
+                  style: kChartLabels,
                   textAlign: TextAlign.center,
                 ),
               ),

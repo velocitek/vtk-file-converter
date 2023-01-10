@@ -63,7 +63,7 @@ class _DownloadPageState extends State<DownloadPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Text("Converting .VTK into .GPX and .CSV...",
+                      Text("Converting .VTK into .GPX and .CSV, please wait.",
                           style: kSubtitleText),
                       SizedBox(
                         width: 50.0,

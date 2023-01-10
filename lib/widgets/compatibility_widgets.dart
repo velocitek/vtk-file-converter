@@ -13,12 +13,12 @@ class TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kDarkBlue,
+      color: kChartBlue,
       height: 60.0,
       width: 105.0,
       child: Center(
           child: Text(widgetText,
-              style: kWarningText, textAlign: TextAlign.center)),
+              style: kChartLabels, textAlign: TextAlign.center)),
     );
   }
 }
@@ -40,7 +40,7 @@ class ServiceRow extends StatelessWidget {
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: Colors.blueGrey,
+                color: kChartGrid,
                 width: 2.0,
               ),
             ),
@@ -81,22 +81,26 @@ class HyperLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: kDarkBlue,
-      width: 180.0,
-      height: 60.0,
-      child: Center(
-        child: SizedBox(
-          height: 40.0,
-          width: 140.0,
-          child: Link(
-            target: LinkTarget.blank,
-            uri: Uri.parse(serviceLink),
-            builder: (context, followLink) => ElevatedButton(
-              onPressed: followLink,
-              child: Text(
-                serviceText,
-                textAlign: TextAlign.center,
+    return Material(
+      elevation: 10.0,
+      child: Container(
+        color: kChartBlue,
+        width: 180.0,
+        height: 60.0,
+        child: Center(
+          child: SizedBox(
+            height: 40.0,
+            width: 140.0,
+            child: Link(
+              target: LinkTarget.blank,
+              uri: Uri.parse(serviceLink),
+              builder: (context, followLink) => ElevatedButton(
+                onPressed: followLink,
+                child: Text(
+                  serviceText,
+                  style: kChartLinks,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
