@@ -48,7 +48,7 @@ class UploadPage extends StatelessWidget {
               const SizedBox(
                 width: 900.0,
                 child: Text(
-                  'Connect your Velocitek device via USB to your computer. Then select or drop your VTK file to this window to use our converter.',
+                  'Connect your Velocitek device via USB to your computer and select your VTK file to use our converter.',
                   style: kSubtitleText,
                   textAlign: TextAlign.center,
                 ),

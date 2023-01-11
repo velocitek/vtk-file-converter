@@ -18,7 +18,8 @@ class HomePage extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Column(
               children: [
-                SizedBox(
+                Container(
+                  color: kDarkBlue,
                   height: 650.0,
                   width: 1200.0,
                   child: Provider.of<DownloadList>(context, listen: true)

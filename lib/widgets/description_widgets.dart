@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../tools/constants.dart';
-import 'package:url_launcher/link.dart';
 
 class DescriptionBlock extends StatelessWidget {
   const DescriptionBlock({Key? key}) : super(key: key);
@@ -46,29 +45,19 @@ class DescriptionBlock extends StatelessWidget {
           height: 10.0,
         ),
         RichText(
-            text: TextSpan(
-                style: kLinkText,
-                text: vtkLink,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () async {
-                    if (await canLaunchUrl(Uri.parse(vtkLink))) {
-                      await launchUrl(Uri.parse(vtkLink));
-                    } else {
-                      throw 'Could not launch $vtkLink';
-                    }
-                  }))
-        // Link(
-        //   target: LinkTarget.blank,
-        //   uri: Uri.parse(vtkLink),
-        //   builder: (context, followLink) => ElevatedButton(
-        //     onPressed: followLink,
-        //     child: Text(
-        //       vtkLink,
-        //       style: kDescriptionText,
-        //       textAlign: TextAlign.left,
-        //     ),
-        //   ),
-        // ),
+          text: TextSpan(
+            style: kLinkText,
+            text: vtkLink,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                if (await canLaunchUrl(Uri.parse(vtkLink))) {
+                  await launchUrl(Uri.parse(vtkLink));
+                } else {
+                  throw 'Could not launch $vtkLink';
+                }
+              },
+          ),
+        ),
       ],
     );
   }
