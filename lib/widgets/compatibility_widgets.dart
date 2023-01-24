@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/service_list.dart';
 import '../tools/constants.dart';
 
@@ -81,6 +81,7 @@ class HyperLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Uri _url = Uri.parse(serviceLink);
     return Material(
       elevation: 10.0,
       child: Container(
@@ -91,22 +92,33 @@ class HyperLink extends StatelessWidget {
           child: SizedBox(
             height: 40.0,
             width: 140.0,
-            child: Link(
-              target: LinkTarget.blank,
-              uri: Uri.parse(serviceLink),
-              builder: (context, followLink) => ElevatedButton(
-                onPressed: followLink,
-                child: Text(
-                  serviceText,
-                  style: kChartLinks,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            child: ElevatedButton(
+              onPressed: () => _launchUrl(serviceLink),
+              child: Text(serviceText),
             ),
+            // child: Link(
+            //   target: LinkTarget.blank,
+            //   uri: Uri.parse(serviceLink),
+            //   builder: (context, followLink) => ElevatedButton(
+            //     onPressed: followLink,
+            //     child: Text(
+            //       serviceText,
+            //       style: kChartLinks,
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   ),
+            // ),
           ),
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchUrl(String serviceLink) async {
+  final Uri url = Uri.parse(serviceLink);
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
   }
 }
 
