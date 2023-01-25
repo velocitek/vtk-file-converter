@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../tools/constants.dart';
+import 'dart:js' as js;
 
 class DescriptionBlock extends StatelessWidget {
   const DescriptionBlock({Key? key}) : super(key: key);
@@ -50,11 +50,7 @@ class DescriptionBlock extends StatelessWidget {
             text: vtkLink,
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                if (await canLaunchUrl(Uri.parse(vtkLink))) {
-                  await launchUrl(Uri.parse(vtkLink));
-                } else {
-                  throw 'Could not launch $vtkLink';
-                }
+                js.context.callMethod('open', [vtkLink]);
               },
           ),
         ),
